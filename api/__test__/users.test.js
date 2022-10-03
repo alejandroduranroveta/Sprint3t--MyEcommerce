@@ -58,3 +58,36 @@ describe('TEST USERS ENDPOINTS STATUS OK', () => {
         });
     });
 });
+describe('TEST USERS ENDPOINTS STATUS ERROR', () => {
+    describe('GET', () => {
+        test.skip('Route status ERROR /users', async () => {
+            const response = await request(app).get('/api/v2/users');
+            expect(response.statusCode).toBe(500);
+        });
+        test('Route status ERROR /users/id', async () => {
+            const response = await request(app).get('/api/v2/users/99');
+            expect(response.statusCode).toBe(404);
+        });
+    });
+    describe('POST', () => {
+        test.skip('Route status ERROR /users/login', async () => {
+            const response = await request(app).post('/api/v2/users/login')
+            expect(response.statusCode).toBe(500);
+        })});
+    describe('POST', () => {
+        test.skip('Route status ERROR /users', async () => {
+            const response = await request(app).post('/api/v2/users')
+            expect(response.statusCode).toBe(500);
+        })});
+    describe('PUT', () => {
+        test.skip('Route status ERROR /users/login/id', async () => {
+            const response = await request(app).put('/api/v2/users')
+            expect(response.statusCode).toBe(404);
+        });});
+    describe('DELETE', () => {
+        test.skip('Route status ERROR /users/id', async () => {
+            const response = await request(app).delete('/api/v2/users');
+            expect(response.statusCode).toBe(404);
+        });
+    });
+});
