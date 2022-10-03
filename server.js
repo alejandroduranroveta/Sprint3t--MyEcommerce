@@ -22,17 +22,18 @@ app.use("/api/v2/category", categoryRouter);
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const PORT = process.env.PORT;
-sequelize
-	.sync({
-		alter: true
-	})
-	.then(() => {
-		console.log("sequelize iniciado");
-	})
-	.catch((err) => {
-		console.log("error: " + err);
-	});
+// sequelize
+// 	.sync({
+// 		//alter: true
+// 	})
+// 	.then(() => {
+// 		console.log("sequelize iniciado");
+// 	})
+// 	.catch((err) => {
+// 		console.log("error: " + err);
+// 	});
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
 	console.log("Se levanto el server en el puerto " + PORT);
 });
+module.exports = {app,server}
