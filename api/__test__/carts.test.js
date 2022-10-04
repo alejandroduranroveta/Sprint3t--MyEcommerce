@@ -32,14 +32,28 @@ describe('Carts /api/v2/carts', () => {
         test('Devuelve un objeto', async () => {
             const response = await request(app).get(rutaGet).auth(token, {type: 'bearer'});
             expect(response.body).toEqual(expect.objectContaining({}));
-        })
+        });
         test('Tiene propiedad user', async () => {
             const response = await request(app).get(rutaGet).auth(token, {type: 'bearer'});
             expect(response.body).toEqual(expect.objectContaining({ id: expect.any(Number)}));
-        })
+        });
+        test('Usuario sin autenticar no tiene propiedades de cart', async () => {
+            const response = await request(app).get(rutaGet);
+            expect(response.body).not.toEqual(expect.objectContaining({ id: expect.any(Number)}));
+        });
         test('Tiene propiedad cart', async () => {
             const response = await request(app).get(rutaGet).auth(token, {type: 'bearer'});
             expect(response.body).toEqual(expect.objectContaining({ cart: expect.any(Object)}));
-        })
+        });
+        test('La propiedad cart es un array de producto cantidad', async () => {
+            const response = await request(app).get(rutaGet).auth(token, {type: 'bearer'});
+            const carts = response.body.cart;
+            carts.forEach(i =>{
+                expect(i).toEqual(expect.objectContaining({
+                    product: expect.any(Number),
+                    quantity: expect.any(Number)})
+                )
+            })
+        });
     })
 });
