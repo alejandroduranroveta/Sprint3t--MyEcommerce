@@ -14,6 +14,11 @@ describe('TEST PRODUCTS', () => {
             const response = await request(app).get('/api/v2/products');
             expect(response.statusCode).toBe(200);
         });
+        test('ruta /products/ID', async () => {
+            const response = await request(app).get('/api/v2/products/1');
+            expect(response.statusCode).toBe(200);
+        });
+        
         test('ruta /search', async () => {
             const response = await request(app).get('/api/v2/products/search');
             expect(response.statusCode).toBe(200);
@@ -23,6 +28,7 @@ describe('TEST PRODUCTS', () => {
             expect(response.statusCode).toBe(200);
         });
     });
+
     describe('POST', () => {
         test.skip('ruta /products', async () => {
             const response = await request(app).post('/api/v2/products').send({
@@ -48,7 +54,7 @@ describe('TEST PRODUCTS', () => {
                 "most_wanted": 1,
             });
             expect(response.statusCode).toBe(200);
-        });
+        })
     });
     describe('DELETE', () => {
         test.skip('Route status-ruta /products', async () => {
@@ -94,3 +100,93 @@ describe('ENDPOINT STATUS ERROR TEST PRODUCTS', () => {
         });
     });
 });
+    /******************************************************** */
+    
+    describe('POST TEST PRODUCTS', () => {
+        describe('POST', () => {
+            test('ruta /products', async () => {
+                const response = await request(app).post('/api/v2/products').send({
+                        "title": "",
+                        "description": "1",
+                        "price": 1,
+                        "category_id": 1,
+                        "most_wanted": 0,
+                        "stock": 1
+                    
+                });
+                expect(response.statusCode).toBe(400);
+            });
+            test('ruta /products', async () => {
+                const response = await request(app).post('/api/v2/products').send({
+                        "title": "productinho",
+                        "description": "",
+                        "price": 1,
+                        "category_id": 1,
+                        "most_wanted": 0,
+                        "stock": 1
+                    
+                });
+                expect(response.statusCode).toBe(200);
+            });
+            test('ruta /products', async () => {
+                const response = await request(app).post('/api/v2/products').send({
+                        "title": "productinho",
+                        "description": "",
+                        "price": -1,
+                        "category_id": 1,
+                        "most_wanted": 0,
+                        "stock": 1
+                    
+                });
+                expect(response.statusCode).toBe(400);
+            });
+            test('ruta /products', async () => {
+                const response = await request(app).post('/api/v2/products').send({
+                        "title": "productinho",
+                        "description": "",
+                        "price": 10,
+                        "category_id": 696969,
+                        "most_wanted": 0,
+                        "stock": 1
+                    
+                });
+                expect(response.statusCode).toBe(500);
+            });
+            test('ruta /products', async () => {
+                const response = await request(app).post('/api/v2/products').send({
+                        "title": "productinho",
+                        "description": "",
+                        "price": -1,
+                        "category_id": 696969,
+                        "most_wanted": 0,
+                        "stock": 1
+                    
+                });
+                expect(response.statusCode).toBe(400);
+            });
+            test('ruta /products', async () => {
+                const response = await request(app).post('/api/v2/products').send({
+                        "title": "productinho",
+                        "description": "",
+                        "price": -1,
+                        "category_id": 1,
+                        "most_wanted": 0,
+                        "stock": -1
+                    
+                });
+                expect(response.statusCode).toBe(400);
+            });
+        });
+        describe('PUT', () => {
+            test.skip('Route status-ruta /products', async () => {
+                const response = await (await request(app).put('/api/v2/products/1'))
+                expect(response.statusCode).toBe(404);
+            });
+        });
+        describe('DELETE', () => {
+            test.skip('Route status-ruta /products', async () => {
+                const response = await request(app).delete('/api/v2/products/114');
+                expect(response.statusCode).toBe(404);
+            });
+        });
+    });
