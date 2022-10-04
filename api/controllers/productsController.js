@@ -71,9 +71,9 @@ const productsController = {
   create: async (req, res) => {
     //agregar un nuevo producto a la bd
     let {
-      title = "un Titulo",
-      description = "unaDescr",
-      price = 50,
+      title = "",
+      description = "",
+      price = 0,
       category_id = 100,
       most_wanted = 0,
       stock = 1,
@@ -81,8 +81,15 @@ const productsController = {
     if (!title || !price) {
       return res
         .status(400)
-        .json({ msg: "Para crear el producto se necesitan mas datos" });
+        .json({ msg: "Need more data" });
+       
     } else {
+      if(price < 0){
+        return res
+        .status(400)
+        .json({ msg: "Price must be positive" });
+        
+      }
       let newProduct = {
         title,
         description,
