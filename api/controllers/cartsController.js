@@ -127,27 +127,4 @@ const editCart = async (req, res) => {
     }
 }
 
-const addToCart = (req, res) => {
-    const { id } = req.dataToken;
-    const { product, quantity } = req.body;
-    const cartId = getCartIdByUserId(id);
-
-    try {
-        db.carts_has_products.create({
-            product_id: product,
-            carts_id: cartId,
-            quantity: quantity
-        }).then(r => {
-            res.status(200).json({
-                msg: 'Item added'
-            });
-        })
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            msg: 'Server error'
-        })
-    }
-}
-
 module.exports = { cartById, editCart, createCart, removeCart };
