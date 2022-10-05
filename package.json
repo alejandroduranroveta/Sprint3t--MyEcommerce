@@ -4,7 +4,7 @@
   "description": "Sprint 1 - Grupo 3 Digital House ***",
   "main": "server.js",
   "scripts": {
-    "test": "jest --watchAll --verbose ",
+    "test": "jest --watchAll --verbose --coverage",
     "start": "node server.js"
   },
   "repository": {

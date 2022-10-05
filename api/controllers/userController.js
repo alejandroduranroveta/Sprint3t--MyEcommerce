@@ -21,7 +21,7 @@ const userController = {
 				success: true,
 				message: "Authorized",
 				user: {
-					iduser: user.id,
+					idUser: user.id,
 					username: user.username,
 				},
 				token,
@@ -98,11 +98,7 @@ const userController = {
 			};
 			await db.users.create(newUser);
 			await createCart(username);
-			req.method === "POST"
-				? res.status(201).json(newUser)
-				: res
-					.status(400)
-					.json({ msg: "You need use POST method for create user" });
+			res.status(201).json(newUser)
 		} catch (error) {
 			console.log(error);
 			res.status(500).json({ msg: "Error database" });
@@ -112,16 +108,7 @@ const userController = {
 		try {
 			let idUser = req.params.id;
 			if (idUser !== null && !isNaN(idUser)) {
-				let newUser = {
-					id: idUser,
-					email: req.body.email,
-					username: req.body.username,
-					first_name: req.body.first_name,
-					last_name: req.body.last_name,
-					profile_pic: req.body.profile_pic,
-					role: req.body.role,
-					password: req.body.password
-				};
+				let newUser = {...req.body};
 				await db.users.update(newUser, { where: { id: idUser } });
 				res.json(newUser);
 			} else if (!isNaN(idUser)) {
@@ -144,7 +131,7 @@ const userController = {
 			if (idUser !== null && !isNaN(idUser)) {
 				const userDeleted = await db.users.findByPk(idUser);
 				await removeCart(idUser);
-				const destroy = await db.users.destroy({
+				await db.users.destroy({
 					where: {
 						id: idUser
 					}
