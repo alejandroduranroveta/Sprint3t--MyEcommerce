@@ -31,7 +31,7 @@ const picturesController = {
     try {
       const { img, description, product_id } = req.body;
       if (!img) {
-        res.status(400).json({ msg: "The URL of the image is required." });
+        return res.status(400).json({ msg: "The URL of the image is required." });
       }
       if (isNaN(product_id) || product_id <= 0) {
         return res
@@ -47,7 +47,9 @@ const picturesController = {
         img,
         description,
         product_id,
+
       }).catch(err => {
+
       console.log(err);
       if (!product) {
         return res

@@ -31,9 +31,12 @@ const PORT = process.env.PORT;
 // 	})
 // 	.catch((err) => {
 // 		console.log("error: " + err);
-// 	});
+// 	}); 
 
-const server = app.listen(PORT, () => {
-	console.log("Se levanto el server en el puerto " + PORT);
-});
-module.exports = {app,server}
+
+	const server = app.listen(PORT, () => {
+		console.log("Se levanto el server en el puerto " + PORT);
+	});
+
+
+module.exports = {app,server};
