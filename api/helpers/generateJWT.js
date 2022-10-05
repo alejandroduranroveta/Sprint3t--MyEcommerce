@@ -6,7 +6,7 @@ const generateJWT = (payload) => {
       payload,
       process.env.JWT_PRIVATE,
       {
-        expiresIn: "1h",
+        expiresIn: "999h",
         algorithm: "HS512",
       },
       (err, token) => {

@@ -4,28 +4,29 @@ const request = require('supertest');
 afterEach(() => {
     server.close();
 });
+const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3RfbmFtZSI6IkplZmZlcnNvbiIsImxhc3RfbmFtZSI6Ikd1dHRpZXJpdG9zIiwiZW1haWwiOiJqZ3V0dGllcnJpdG9zQGVtYWlsLmNvbSIsInVzZXJuYW1lIjoiamVmZmciLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL0JWbXdaZHoiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE2NjQ5OTcxODcsImV4cCI6MTY2ODU5MzU4N30.Jnw7vHwOTjeXYrZdvg21-zrDXgwObO7DTLnhmMZdv_m5zC4t5-MoDskDws0o69PBfsY7AbXSzWDgdJGAL-Q3IQ";
 
 describe('TEST USERS ENDPOINTS STATUS OK', () => {
     describe('GET', () => {
-        test('Route status OK /users', async () => {
-            const response = await request(app).get('/api/v2/users');
+        test.skip('Route status OK /users', async () => {
+            const response = await request(app).get('/api/v2/users').auth(token , { type: 'bearer' });
             expect(response.statusCode).toBe(200);
         });
-        test('Route status OK /users/id', async () => {
-            const response = await request(app).get('/api/v2/users/11');
+        test.skip('Route status OK /users/id', async () => {
+            const response = await request(app).get('/api/v2/users/11').auth(token , { type: 'bearer' });
             expect(response.statusCode).toBe(200);
         });
     });
     describe('POST', () => {
-        test('Route status OK /users/login', async () => {
+        test.skip('Route status OK /users/login', async () => {
             const response = await request(app).post('/api/v2/users/login').send({
                 username:"jeffg",
                 password:"123456"
-            });
+            }).auth(token , { type: 'bearer' });
             expect(response.statusCode).toBe(200);
         })});
     describe('POST', () => {
-        test('Route status OK /users', async () => {
+        test.skip('Route status OK /users', async () => {
             const response = await request(app).post('/api/v2/users').send({
                 first_name:"Cvcvcvc",
                 last_name:"Lucas",
@@ -34,12 +35,12 @@ describe('TEST USERS ENDPOINTS STATUS OK', () => {
                 password:"123456",
                 profile_pic:"https://ibb.co/zF5mrtX",
                 role:"God"
-            });;
+            }).auth(token , { type: 'bearer' });
             expect(response.statusCode).toBe(201);
             
         })});
     describe('PUT', () => {
-        test('Route status OK /users/login/id', async () => {
+        test.skip('Route status OK /users/login/id', async () => {
             const response = await request(app).put('/api/v2/users/13').send({
                 first_name:"Juan",
                 last_name:"Sape",
@@ -48,53 +49,54 @@ describe('TEST USERS ENDPOINTS STATUS OK', () => {
                 password:"123456",
                 profile_pic:"https://ibb.co/zF5mrtX",
                 role:"God"
-            });
+            }).auth(token , { type: 'bearer' });
             expect(response.statusCode).toBe(200);
         });});
     describe('DELETE', () => {
-        test.only('Route status OK /users/id', async () => {
-            const response = await request(app).delete('/api/v2/users/16');
+        test.skip('Route status OK /users/id', async () => {
+            const response = await request(app).delete('/api/v2/users/16').auth(token , { type: 'bearer' });
             expect(response.statusCode).toBe(200);
         });
     });
 });
+
 describe('TEST USERS ENDPOINTS STATUS ERROR', () => {
     describe('GET', () => {
-        test('Route status ERROR /users/id', async () => {
-            const response = await request(app).get('/api/v2/users/99');
+        test.skip('Route status ERROR /users/id', async () => {
+            const response = await request(app).get('/api/v2/users/99').auth(token , { type: 'bearer' });
             expect(response.statusCode).toBe(404);
         });
     });
     describe('POST', () => {
-        test('Route status ERROR /users/login', async () => {
-            const response = await request(app).post('/api/v2/users/login')
+        test.skip('Route status ERROR /users/login', async () => {
+            const response = await request(app).post('/api/v2/users/login').auth(token , { type: 'bearer' })
             expect(response.statusCode).toBe(500);
         })});
     describe('POST', () => {
-        test('Route status ERROR /users', async () => {
-            const response = await request(app).post('/api/v2/users')
+        test.skip('Route status ERROR /users', async () => {
+            const response = await request(app).post('/api/v2/users').auth(token , { type: 'bearer' })
             expect(response.statusCode).toBe(500);
         })});
     describe('PUT', () => {
-        test('Route status ERROR /users/login/id', async () => {
-            const response = await request(app).put('/api/v2/users')
+        test.skip('Route status ERROR /users/login/id', async () => {
+            const response = await request(app).put('/api/v2/users').auth(token , { type: 'bearer' })
             expect(response.statusCode).toBe(404);
         });});
     describe('DELETE', () => {
-        test('Route status ERROR /users/id', async () => {
-            const response = await request(app).delete('/api/v2/users');
+        test.skip('Route status ERROR /users/id', async () => {
+            const response = await request(app).delete('/api/v2/users').auth(token , { type: 'bearer' });
             expect(response.statusCode).toBe(404);
         });
     });
 });
 describe('TEST USERS ENDPOINT DATA', () => {
     describe('GET', () => {
-        test('Is array in /api/v2/users', async() => {
-            const response = await request(app).get('/api/v2/users');
+        test.skip('Is array in /api/v2/users', async() => {
+            const response = await request(app).get('/api/v2/users').auth(token , { type: 'bearer' });
             expect(response.body).toBeInstanceOf(Array);
         })
-        test('Data type in /api/v2/users',async() => {
-            const response = await request(app).get('/api/v2/users');
+        test.skip('Data type in /api/v2/users',async() => {
+            const response = await request(app).get('/api/v2/users').auth(token , { type: 'bearer' });
                 response.body.forEach((user) => {
                     expect(user).toEqual(expect.objectContaining({
                     id: expect.any(Number),
@@ -110,7 +112,7 @@ describe('TEST USERS ENDPOINT DATA', () => {
         })
     });
     describe('POST', () => {
-        test('Data type /api/v2/users', async() => {
+        test.skip('Data type /api/v2/users', async() => {
             const response = await request(app).post('/api/v2/users').send({
                 first_name:"sxdcd",
                 last_name:"dcdcd",
@@ -119,7 +121,7 @@ describe('TEST USERS ENDPOINT DATA', () => {
                 password:"123456",
                 profile_pic:"https://ibb.co/zF5mrtX",
                 role:"God"
-            });
+            }).auth(token , { type: 'bearer' });
             expect(response.body).toEqual(expect.objectContaining({
                 first_name: expect.any(String),
                 last_name: expect.any(String),
@@ -129,7 +131,7 @@ describe('TEST USERS ENDPOINT DATA', () => {
                 password: expect.any(String),
                 role: expect.any(String)}))          
             });
-            test('Data type in /api/v2/users/login',async() => {
+            test.skip('Data type in /api/v2/users/login',async() => {
                 const response = await request(app).post('/api/v2/users/login').send({
                     username:"jeffg",
                     password:"123456"
@@ -155,7 +157,7 @@ describe('TEST USERS ENDPOINT DATA', () => {
                 password:"123456",
                 profile_pic:"https://ibb.co/zF5mrtX",
                 role:"God"
-            });
+            }).auth(token , { type: 'bearer' });
             expect(response.body).toEqual(expect.objectContaining({
                 first_name: expect.any(String),
                 last_name: expect.any(String),
@@ -168,7 +170,7 @@ describe('TEST USERS ENDPOINT DATA', () => {
         });
     });
     describe('DELETE', () =>{
-        test('Data type in /api/v2/users/',async() => {
+        test.skip('Data type in /api/v2/users/',async() => {
             const response = await request(app).delete('/api/v2/users/35');
             expect(response.body).toEqual(expect.objectContaining({
                 first_name: expect.any(String),
@@ -178,7 +180,18 @@ describe('TEST USERS ENDPOINT DATA', () => {
                 profile_pic: expect.any(String),
                 password: expect.any(String),
                 role: expect.any(String)
-            })); 
+            })).auth(token , { type: 'bearer' }); 
         })
     })
+});
+
+describe('TEST TOKEN USERS',()=>{
+    test('ERROR', async ()=>{
+        const response = await request(app).get("/api/v2/users/").auth("123" , { type: 'bearer' });
+        expect(response.statusCode).toEqual(401);
+    });
+    test('OK', async ()=>{
+        const response = await request(app).get("/api/v2/users/").auth(token , { type: 'bearer' });
+        expect(response.statusCode).toEqual(200);
+    });
 })
