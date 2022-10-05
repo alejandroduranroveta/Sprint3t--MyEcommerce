@@ -155,3 +155,84 @@ describe('ENDPOINTS TEST', () => {
     });
 });
 
+
+
+
+describe('TOKEN TEST', () => {
+
+
+    describe('GET', () => {
+
+        test('Token correcto', async () => {
+            const response = await request(app).get("/api/v2/pictures/10").auth(token, { type: 'bearer' });
+            expect(response.statusCode).toBe(200);
+        });
+        test('Token vencido', async () => {
+            const response = await request(app).get("/api/v2/pictures/10").auth(tokenVencido, { type: 'bearer' });
+            expect(response.statusCode).toBe(401);
+        });
+        test('Token faltante', async () => {
+            const response = await request(app).get("/api/v2/pictures/10");
+            expect(response.statusCode).toBe(400);
+        });
+    });
+
+    describe('POST', () => {
+
+        const pictureTest = {
+            img: "www.imagen.com",
+            description: "una descripción",
+            product_id: 1
+        };
+        test.skip('Token correcto', async () => {
+            const response = await request(app).post("/api/v2/pictures").send(pictureTest).auth(token, { type: 'bearer' });
+            expect(response.statusCode).toBe(201);
+        });
+        test('Token vencido', async () => {
+            const response = await request(app).post("/api/v2/pictures").send(pictureTest).auth(tokenVencido, { type: 'bearer' });
+            expect(response.statusCode).toBe(401);
+        });
+        test('Token faltante', async () => {
+            const response = await request(app).post("/api/v2/pictures").send(pictureTest);
+            expect(response.statusCode).toBe(400);
+        });
+    });
+
+    describe('PUT', () => {
+
+        const pictureTest = {
+            img: "www.probandoandoimg.com/abcabc",
+            description: "imagen de prueba",
+            product_id: 2
+        };
+        test.skip('Token correcto', async () => {
+            const response = await request(app).put('/api/v2/pictures/10').send(pictureTest).auth(token, { type: 'bearer' });
+            expect(response.statusCode).toBe(200);
+        });
+        test('Token vencido', async () => {
+            const response = await request(app).put('/api/v2/pictures/10').send(pictureTest).auth(tokenVencido, { type: 'bearer' });
+            expect(response.statusCode).toBe(401);
+        });
+        test('Token faltante', async () => {
+            const response = await request(app).put('/api/v2/pictures/10').send(pictureTest);
+            expect(response.statusCode).toBe(400);
+        });
+    });
+
+    describe('DELETE', () => {
+            test.skip('Token correcto', async () => {
+                const response = await request(app).delete('/api/v2/pictures/10').auth(token, { type: 'bearer' });
+                expect(response.statusCode).toBe(200);
+            });
+            test.skip('Token vencido', async () => {
+                const response = await request(app).delete('/api/v2/pictures/10').auth(tokenVencido, { type: 'bearer' });
+                expect(response.statusCode).toBe(200);
+            });
+            test.skip('Token faltante', async () => {
+                const response = await request(app).delete('/api/v2/pictures/10')
+                expect(response.statusCode).toBe(200);
+            });
+
+    });
+});
+
