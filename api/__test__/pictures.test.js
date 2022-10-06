@@ -249,3 +249,51 @@ describe('TOKEN TEST', () => {
 });
 
 
+
+describe('DATA TYPES TEST', () => {
+
+    describe('GET', () => {
+        test.skip('Tipos de datos correctos en body (PIC)', async () => {
+            const response = await request(app).get('/api/v2/pictures/10').send({
+            }).auth(token, { type: 'bearer' });
+            expect(response.body.pic).toEqual(expect.objectContaining({
+                img: expect.any(String),
+                description: expect.any(String),
+                product_id: expect.any(Number),
+            }));
+        });
+    });
+
+    describe('POST', () => {
+        test.skip('Tipos de datos correctos en body (PIC)', async () => {
+            const response = await request(app).post('/api/v2/pictures').send({
+                img: "www.example.com",
+                description: "example description",
+                product_id: 3,
+            }).auth(token, { type: 'bearer' });
+            expect(response.body.pic).toEqual(expect.objectContaining({
+                img: expect.any(String),
+                description: expect.any(String),
+                product_id: expect.any(Number),
+            }));
+        });
+    });
+
+        describe('PUT', () => {
+            test('Tipos de datos correctos en body (diferentes a la bd)', async () => {
+                let randomNum = Math.random(100);
+                const response = await request(app).put('/api/v2/pictures/13').send({
+                    product_id: 3,
+                    img: "www.example.com/"+randomNum,
+                    description: "example description",
+                }).auth(token,{ type: 'bearer' });
+                expect(response.body).toEqual(expect.objectContaining({
+                    img: expect.any(String),
+                    description: expect.any(String),
+                    product_id: expect.any(Number),
+                    msg: expect.any(String)
+                }));
+            });
+        });
+
+    });
