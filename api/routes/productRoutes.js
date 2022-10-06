@@ -8,6 +8,7 @@ const isGuest = require("../middlewares/isGuest");
 const isAdmin = require("../middlewares/isAdmin");
 const verifyJWT = require("../middlewares/verifyJWT");
 
+
 router.get('/search',verifyJWT,/*isGuest,*/list);
 router.get('/mostwanted',verifyJWT,/*isGuest,*/mostwanted);
 router.get('/',verifyJWT,/*isGuest,*/list); 
