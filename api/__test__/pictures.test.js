@@ -7,6 +7,7 @@ afterEach(() => {
 
 const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY0OTk0ODAwLCJleHAiOjE2Njg1OTEyMDB9.MYZRKjddfmmIbnIqu8QcSjS2BPEdnuAu8VJm_ciMXDYQlIsOiNfUuqFB3z09VwsS7J1_IhhBpaf2f4AP3d-hbw";
 const tokenVencido = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY0Mzc1MDMyLCJleHAiOjE2NjQzNzg2MzJ9.ewdeBDT7nmLNgK0FDT_hn5YMm0ptgKcRbVRPff0NVSL20ekylx9_7IUgwHJhvqVWz7-K-Y8jGko89NPEirv7Nw";
+let randomNum = Math.random(100);
 
 describe('ENDPOINTS TEST', () => {
 
@@ -58,8 +59,8 @@ describe('ENDPOINTS TEST', () => {
         describe('Status 200', () => {
             test.skip('Crear una imagen, RUTA /pictures', async () => {
                 const pictureTest = {
-                    img: "www.imagen.com",
-                    description: "una descripción",
+                    img: "www.imagen.com/"+randomNum,
+                    description: "Ejemplo de una descriptción",
                     product_id: 1
                 };
                 const response = await request(app).post('/api/v2/pictures').send(pictureTest).auth(token, { type: 'bearer' });
@@ -93,7 +94,7 @@ describe('ENDPOINTS TEST', () => {
             describe('Status 200', () => {
                 test.skip('Modificar una imágen, RUTA /pictures/10', async () => {
                     const pictureTest = {
-                        img: "www.probandoandoimg.com/abcabc",
+                        img: "www.exampleimg.com/abcabc"+randomNum,
                         description: "imagen de prueba",
                         product_id: 2
                     };
@@ -162,18 +163,23 @@ describe('TOKEN TEST', () => {
 
 
     describe('GET', () => {
-
-        test('Token correcto', async () => {
-            const response = await request(app).get("/api/v2/pictures/10").auth(token, { type: 'bearer' });
-            expect(response.statusCode).toBe(200);
+        describe('Status 200', () => {
+            test('Token correcto', async () => {
+                const response = await request(app).get("/api/v2/pictures/10").auth(token, { type: 'bearer' });
+                expect(response.statusCode).toBe(200);
+            });
         });
-        test('Token vencido', async () => {
-            const response = await request(app).get("/api/v2/pictures/10").auth(tokenVencido, { type: 'bearer' });
-            expect(response.statusCode).toBe(401);
+        describe('Status 401', () => {
+            test('Token vencido', async () => {
+                const response = await request(app).get("/api/v2/pictures/10").auth(tokenVencido, { type: 'bearer' });
+                expect(response.statusCode).toBe(401);
+            });
         });
-        test('Token faltante', async () => {
-            const response = await request(app).get("/api/v2/pictures/10");
-            expect(response.statusCode).toBe(400);
+        describe('Status 400', () => {
+            test('Token faltante', async () => {
+                const response = await request(app).get("/api/v2/pictures/10");
+                expect(response.statusCode).toBe(400);
+            });
         });
     });
 
@@ -184,24 +190,30 @@ describe('TOKEN TEST', () => {
             description: "una descripción",
             product_id: 1
         };
-        test.skip('Token correcto', async () => {
-            const response = await request(app).post("/api/v2/pictures").send(pictureTest).auth(token, { type: 'bearer' });
-            expect(response.statusCode).toBe(201);
+        describe('Status 201', () => {
+            test.skip('Token correcto', async () => {
+                const response = await request(app).post("/api/v2/pictures").send(pictureTest).auth(token, { type: 'bearer' });
+                expect(response.statusCode).toBe(201);
+            });
         });
-        test('Token vencido', async () => {
-            const response = await request(app).post("/api/v2/pictures").send(pictureTest).auth(tokenVencido, { type: 'bearer' });
-            expect(response.statusCode).toBe(401);
+        describe('Status 401', () => {
+            test('Token vencido', async () => {
+                const response = await request(app).post("/api/v2/pictures").send(pictureTest).auth(tokenVencido, { type: 'bearer' });
+                expect(response.statusCode).toBe(401);
+            });
         });
-        test('Token faltante', async () => {
-            const response = await request(app).post("/api/v2/pictures").send(pictureTest);
-            expect(response.statusCode).toBe(400);
+        describe('Status 400', () => {
+            test('Token faltante', async () => {
+                const response = await request(app).post("/api/v2/pictures").send(pictureTest);
+                expect(response.statusCode).toBe(400);
+            });
         });
     });
 
     describe('PUT', () => {
 
         const pictureTest = {
-            img: "www.probandoandoimg.com/abcabc",
+            img: "www.probandoandoimg.com/abcabc/"+randomNum,
             description: "imagen de prueba",
             product_id: 2
         };
@@ -220,19 +232,68 @@ describe('TOKEN TEST', () => {
     });
 
     describe('DELETE', () => {
-            test.skip('Token correcto', async () => {
-                const response = await request(app).delete('/api/v2/pictures/10').auth(token, { type: 'bearer' });
-                expect(response.statusCode).toBe(200);
-            });
-            test.skip('Token vencido', async () => {
-                const response = await request(app).delete('/api/v2/pictures/10').auth(tokenVencido, { type: 'bearer' });
-                expect(response.statusCode).toBe(200);
-            });
-            test.skip('Token faltante', async () => {
-                const response = await request(app).delete('/api/v2/pictures/10')
-                expect(response.statusCode).toBe(200);
-            });
+        test.skip('Token correcto', async () => {
+            const response = await request(app).delete('/api/v2/pictures/10').auth(token, { type: 'bearer' });
+            expect(response.statusCode).toBe(200);
+        });
+        test('Token vencido', async () => {
+            const response = await request(app).delete('/api/v2/pictures/10').auth(tokenVencido, { type: 'bearer' });
+            expect(response.statusCode).toBe(401);
+        });
+        test('Token faltante', async () => {
+            const response = await request(app).delete('/api/v2/pictures/10')
+            expect(response.statusCode).toBe(400);
+        });
 
     });
 });
 
+
+
+describe('DATA TYPES TEST', () => {
+
+    describe('GET', () => {
+        test.skip('Tipos de datos correctos en body (PIC)', async () => {
+            const response = await request(app).get('/api/v2/pictures/10').send({
+            }).auth(token, { type: 'bearer' });
+            expect(response.body.pic).toEqual(expect.objectContaining({
+                img: expect.any(String),
+                description: expect.any(String),
+                product_id: expect.any(Number),
+            }));
+        });
+    });
+
+    describe('POST', () => {
+        test.skip('Tipos de datos correctos en body (PIC)', async () => {
+            const response = await request(app).post('/api/v2/pictures').send({
+                img: "www.example.com",
+                description: "example description",
+                product_id: 3,
+            }).auth(token, { type: 'bearer' });
+            expect(response.body.pic).toEqual(expect.objectContaining({
+                img: expect.any(String),
+                description: expect.any(String),
+                product_id: expect.any(Number),
+            }));
+        });
+    });
+
+        describe('PUT', () => {
+            test('Tipos de datos correctos en body (diferentes a la bd)', async () => {
+                let randomNum = Math.random(100);
+                const response = await request(app).put('/api/v2/pictures/13').send({
+                    product_id: 3,
+                    img: "www.example.com/"+randomNum,
+                    description: "example description",
+                }).auth(token,{ type: 'bearer' });
+                expect(response.body).toEqual(expect.objectContaining({
+                    img: expect.any(String),
+                    description: expect.any(String),
+                    product_id: expect.any(Number),
+                    msg: expect.any(String)
+                }));
+            });
+        });
+
+    });
