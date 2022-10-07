@@ -15,7 +15,7 @@ const productsController = {
           where: { category_id: category },
         });
         if (searchCategory.length == 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             msg: "Products not found",
           });
         } else {
@@ -35,7 +35,7 @@ const productsController = {
           },
         });
         if (product.length == 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             msg: "Products not found",
           });
         } else {
@@ -63,7 +63,7 @@ const productsController = {
       let searchById = await db.products.findByPk(req.params.id);
       res.send(searchById.dataValues);
     } catch (error) {
-      res.status(401).json({
+      res.status(404).json({
         msg: "Not found product",
       });
     }
@@ -130,7 +130,7 @@ const productsController = {
 
         res.json(newProduct);
       } else {
-        res.status(500).json({
+        res.status(404).json({
           msg: "Not found id",
         });
       }
