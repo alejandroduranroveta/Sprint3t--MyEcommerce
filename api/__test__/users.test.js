@@ -4,7 +4,7 @@ const request = require('supertest');
 afterEach(() => {
     server.close();
 });
-const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY0OTk0ODAwLCJleHAiOjE2Njg1OTEyMDB9.MYZRKjddfmmIbnIqu8QcSjS2BPEdnuAu8VJm_ciMXDYQlIsOiNfUuqFB3z09VwsS7J1_IhhBpaf2f4AP3d-hbw";
+const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY1NDMxMDU4LCJleHAiOjM3NjY1NDI3NDU4fQ.9n1hYoOu0RhP2vh_nthpB5Hs7fAnzlfvjfdiS_G7TY_iUdziNJFyaAYSWDtXGQA74-vTf-St4bSlDaEPifEnxA";
 
 describe('TEST USERS ENDPOINTS STATUS OK', () => {
     describe('GET', () => {

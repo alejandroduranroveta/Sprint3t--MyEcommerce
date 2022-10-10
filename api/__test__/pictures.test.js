@@ -5,7 +5,7 @@ afterEach(() => {
     server.close();
 });
 
-const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY0OTk0ODAwLCJleHAiOjE2Njg1OTEyMDB9.MYZRKjddfmmIbnIqu8QcSjS2BPEdnuAu8VJm_ciMXDYQlIsOiNfUuqFB3z09VwsS7J1_IhhBpaf2f4AP3d-hbw";
+const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY1NDMxMDU4LCJleHAiOjM3NjY1NDI3NDU4fQ.9n1hYoOu0RhP2vh_nthpB5Hs7fAnzlfvjfdiS_G7TY_iUdziNJFyaAYSWDtXGQA74-vTf-St4bSlDaEPifEnxA";
 const tokenVencido = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY0Mzc1MDMyLCJleHAiOjE2NjQzNzg2MzJ9.ewdeBDT7nmLNgK0FDT_hn5YMm0ptgKcRbVRPff0NVSL20ekylx9_7IUgwHJhvqVWz7-K-Y8jGko89NPEirv7Nw";
 let randomNum = Math.random(100);
 
@@ -230,15 +230,15 @@ describe('TOKEN TEST', () => {
             product_id: 2
         };
         test('Token correcto', async () => {
-            const response = await request(app).put('/api/v2/pictures/3').send(pictureTest).auth(token, { type: 'bearer' });
+            const response = await request(app).put('/api/v2/pictures/4').send(pictureTest).auth(token, { type: 'bearer' });
             expect(response.statusCode).toBe(200);
         });
         test('Token vencido', async () => {
-            const response = await request(app).put('/api/v2/pictures/3').send(pictureTest).auth(tokenVencido, { type: 'bearer' });
+            const response = await request(app).put('/api/v2/pictures/4').send(pictureTest).auth(tokenVencido, { type: 'bearer' });
             expect(response.statusCode).toBe(401);
         });
         test('Token faltante', async () => {
-            const response = await request(app).put('/api/v2/pictures/3').send(pictureTest);
+            const response = await request(app).put('/api/v2/pictures/4').send(pictureTest);
             expect(response.statusCode).toBe(400);
         });
     });
@@ -303,7 +303,7 @@ describe('DATA TYPES TEST', () => {
     describe('PUT', () => {
         test('Tipos de datos correctos en body (diferentes a la bd)', async () => {
             let randomNum = Math.random(100);
-            const response = await request(app).put('/api/v2/pictures/13').send({
+            const response = await request(app).put('/api/v2/pictures/4').send({
                 product_id: 3,
                 img: "www.example.com/" + randomNum,
                 description: "example description",
@@ -345,16 +345,16 @@ describe('SERVER ERROR', () => {
 
     describe('GET', () => {
 
-        test.skip('Status 500, RUTA /pictures/23', async () => {
-            const response = await request(app).get('/api/v2/pictures/23').auth(token, { type: 'bearer' });
+        test.skip('Status 500, RUTA /pictures/1', async () => {
+            const response = await request(app).get('/api/v2/pictures/1').auth(token, { type: 'bearer' });
             expect(response.statusCode).toBe(500);
         });
-        test.skip('Status 500, RUTA /products/23/pictures', async () => {
-            const response = await request(app).get('/api/v2/products/23/pictures').auth(token, { type: 'bearer' });
+        test.skip('Status 500, RUTA /products/1/pictures', async () => {
+            const response = await request(app).get('/api/v2/products/1/pictures').auth(token, { type: 'bearer' });
             expect(response.statusCode).toBe(500);
         });
-        test.skip('Status 500, QUERY /pictures/?product_id=23', async () => {
-            const response = await request(app).get('/api/v2/pictures/?product_id=23').auth(token, { type: 'bearer' });
+        test.skip('Status 500, QUERY /pictures/?product_id=1', async () => {
+            const response = await request(app).get('/api/v2/pictures/?product_id=1').auth(token, { type: 'bearer' });
             expect(response.statusCode).toBe(500);
         });
     });
@@ -379,15 +379,26 @@ describe('SERVER ERROR', () => {
             product_id: 2
         };
         test.skip('Status 500', async () => {
-            const response = await request(app).put('/api/v2/pictures/23').send(pictureTest).auth(token, { type: 'bearer' });
+            const response = await request(app).put('/api/v2/pictures/4').send(pictureTest).auth(token, { type: 'bearer' });
             expect(response.statusCode).toBe(500);
         });
 
     });
     describe('DELETE', () => {
+        let newPicture;
+        const pictureTest = {
+            img: "www.imagen.com/" + randomNum,
+            description: "Ejemplo de una descriptción",
+            product_id: 1
+        }
         test.skip('Status 500, Ruta /:id', async () => {
-            const response = await request(app).delete('/api/v2/pictures/23').auth(token, { type: 'bearer' });
-            expect(response.statusCode).toBe(500);
+
+            newPicture = await request(app).post('/api/v2/pictures').send(pictureTest).auth(token, { type: 'bearer' });
+                const id = newPicture._body.pic.id;
+                const response = await request(app).delete(`/api/v2/pictures/${id}`).auth(token, { type: 'bearer' });
+                expect(response.statusCode).toBe(500);
         });
+
+
     });
 });
