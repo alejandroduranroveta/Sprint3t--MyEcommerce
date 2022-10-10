@@ -1,13 +1,11 @@
 const { app, server } = require('../../server');
 const request = require('supertest');
-var sinon = require('sinon');
-var responseMock = sinon.mock(response);
 
 afterEach(() => {
     server.close();
 });
 
-const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY0OTk4MTQyLCJleHAiOjM3NjY0OTk0NTQyfQ.EPHXEEKuoxX01w9dhYv7n2LbgPSwrNSf4JzynCxm_FrT3Vgtoum1u9NoNGbAeqwIk85P8CWTYgweF5UQCk2KNw";
+const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY1NDE5MzkzLCJleHAiOjM3NjY1NDE1NzkzfQ.EDll5hj9_ImG99toSRWal-wbVbnQev7Xn3intMHDDli560_f3doFy1T-MEe_COKVovHtLj0pd4AEfAu4b8p_dw";
 const tokenVencido = "123";
 
 
@@ -37,9 +35,15 @@ describe('TEST EXITO 200 ', () => {
             const response = await request(app).get('/api/v2/products/mostwanted').auth(token, { type: 'bearer' });
             expect(response.statusCode).toBe(200);
         });
+        test('get /:id/pictures', async () => {
+            const response = await request(app).get('/api/v2/products/1/pictures').auth(token, { type: 'bearer' });
+            expect(response.statusCode).toBe(200);
+        });
     });
+    var Idproducts
     describe('POST', () => {
-        test.skip('/products', async () => {
+        
+        test('/products', async () => {
             const response = await request(app).post('/api/v2/products').send({
                 "title": "unProducto",
                 "description": "1",
@@ -48,6 +52,8 @@ describe('TEST EXITO 200 ', () => {
                 "stock": 1,
                 "most_wanted": 1,
             }).auth(token, { type: 'bearer' });
+            Idproducts = response._body.id
+            
             expect(response.statusCode).toBe(200);
         });
     });
@@ -64,9 +70,12 @@ describe('TEST EXITO 200 ', () => {
             expect(response.statusCode).toBe(200);
         })
     });
+    
     describe('DELETE', () => {
-        test.skip('Route status-ruta /products', async () => {
-            const response = await request(app).delete('/api/v2/products/1').auth(token, { type: 'bearer' });
+        
+        test('delete producto con sus pictures   ', async () => {
+
+            const response = await request(app).delete(`/api/v2/products/${Idproducts}`).auth(token, { type: 'bearer' });
             expect(response.statusCode).toBe(200);
         });
     });
@@ -223,14 +232,15 @@ describe('NEED CORRECT INFO TEST - ERROR 400', () => {
             });
         });
     });
-
-
-
-
-    describe('TEST FAIL 500 - Interrupcion ', () => {
+    
+    beforeEach(() => {
+        server.close();
+    });
+describe('TEST FAIL 500 - Interrupcion ', () => {
         describe('GET', () => {
             
             test.skip('get /products', async () => {
+                
                 const response = await request(app).get('/api/v2/products').auth(token,{ type: 'bearer' });
                 expect(response.statusCode).toBe(500);
             });
@@ -253,6 +263,11 @@ describe('NEED CORRECT INFO TEST - ERROR 400', () => {
                 const response = await request(app).get('/api/v2/products/mostwanted').auth(token, { type: 'bearer' });
                 expect(response.statusCode).toBe(500);
             });
+            test.skip('get /:id/pictures', async () => {
+                const response = await request(app).get('/api/v2/products/1/pictures').auth(token, { type: 'bearer' });
+                expect(response.statusCode).toBe(500);
+            });
+
         });
         describe('POST', () => {
             test.skip('/products', async () => {
@@ -277,7 +292,7 @@ describe('NEED CORRECT INFO TEST - ERROR 400', () => {
                     "stock": 1,
                     "most_wanted": 1,
                 }).auth(token, { type: 'bearer' });
-                expect(response.statusCode).toBe(500);
+                expect(re.statusCode).toBe(500);
             })
         });
         describe('DELETE', () => {
@@ -287,27 +302,8 @@ describe('NEED CORRECT INFO TEST - ERROR 400', () => {
             });
         });
     });
- 
-//errores 500 hay que ver como hacerlo
-
-    // test.skip('ruta /products', async () => {
-        //     const response = await request(app).get('/api/v2/products');
-        //     expect(response.statusCode).toBe(500);
- //});
- //create error 500
-
- //put modify 500 linea 138
-
- //mostwantes sin ninguno correcto
 
 
-//  describe('/api/search route', () => {
-//     it('should return a 500 when an error is encountered', async () => {
-//       // stub an error
-//       sinon.stub(itemQueries, 'search').throws(Error('db query failed'))
-  
-//       await request(app) // pass Express app to supertest
-//         .post('/api/search') // call Express route we want to test
-//         .send({term: 'blah', num: 1}) // pass normally expected, valid data in request body
-//         .expect(500) // assert that we return a HTTP 500 response status code
-//     })
+
+
+

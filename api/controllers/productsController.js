@@ -97,8 +97,8 @@ const productsController = {
         stock,
       };
       try {
-        await db.products.create(newProduct);
-        res.status(200).json(newProduct);
+        let product = await db.products.create(newProduct);
+        res.status(200).json(product);
       } catch (error) {
         console.log(error);
         res.status(500).json({
