@@ -59,7 +59,7 @@ describe('TEST EXITO 200 ', () => {
     });
     describe('PUT', () => {
         test('/products', async () => {
-            const response = await request(app).put('/api/v2/products/1').send({
+            const response = await request(app).put(`/api/v2/products/${Idproducts}`).send({
                 "title": "unProductoModificado",
                 "description": "1",
                 "category_id": 1,
