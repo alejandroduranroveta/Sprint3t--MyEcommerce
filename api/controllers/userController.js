@@ -21,7 +21,7 @@ const userController = {
 				success: true,
 				message: "Authorized",
 				user: {
-					iduser: user.id,
+					idUser: user.id,
 					username: user.username,
 				},
 				token,
@@ -58,11 +58,11 @@ const userController = {
 				attributes: { exclude: ['password'] }
 			});
 			if (searchById != null) {
-				res.status(200).json(searchById);
+				return res.status(200).json(searchById);
 			} else if (!isNaN(req.params.id)) {
-				res.status(404).json({ msg: "Not fund user" });
+				return res.status(404).json({ msg: "Not fund user" });
 			} else {
-				res
+				return res
 					.status(400)
 					.json({
 						msg: `'${req.params.id}' that is not a valid id, try with something else numerical`,
@@ -97,12 +97,8 @@ const userController = {
 				username
 			};
 			await db.users.create(newUser);
-			await createCart(username);
-			req.method === "POST"
-				? res.status(201).json(newUser)
-				: res
-					.status(400)
-					.json({ msg: "You need use POST method for create user" });
+			//await createCart(username);
+			res.status(201).json(newUser)
 		} catch (error) {
 			console.log(error);
 			res.status(500).json({ msg: "Error database" });
@@ -112,16 +108,7 @@ const userController = {
 		try {
 			let idUser = req.params.id;
 			if (idUser !== null && !isNaN(idUser)) {
-				let newUser = {
-					id: idUser,
-					email: req.body.email,
-					username: req.body.username,
-					first_name: req.body.first_name,
-					last_name: req.body.last_name,
-					profile_pic: req.body.profile_pic,
-					role: req.body.role,
-					password: req.body.password
-				};
+				let newUser = {...req.body};
 				await db.users.update(newUser, { where: { id: idUser } });
 				res.json(newUser);
 			} else if (!isNaN(idUser)) {
@@ -143,13 +130,17 @@ const userController = {
 			let idUser = req.params.id;
 			if (idUser !== null && !isNaN(idUser)) {
 				const userDeleted = await db.users.findByPk(idUser);
-				await removeCart(idUser);
-				const destroy = await db.users.destroy({
-					where: {
-						id: idUser
-					}
-				});
-				res.status(200).json(userDeleted);
+				//await removeCart(idUser);
+				if (userDeleted!==null) {
+					await db.users.destroy({
+						where: {
+							id: idUser
+						}
+					});
+					return res.status(404).json(userDeleted);
+				} else {
+					return res.status(404).json({ msg: "Not fund user" });
+				}
 			} else if (!isNaN(idUser)) {
 				return res.status(404).json({ msg: "Not fund user" });
 			} else {

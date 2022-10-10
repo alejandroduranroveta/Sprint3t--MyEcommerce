@@ -15,7 +15,7 @@ const productsController = {
           where: { category_id: category },
         });
         if (searchCategory.length == 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             msg: "Products not found",
           });
         } else {
@@ -35,7 +35,7 @@ const productsController = {
           },
         });
         if (product.length == 0) {
-          return res.status(200).json({
+          return res.status(404).json({
             msg: "Products not found",
           });
         } else {
@@ -47,9 +47,7 @@ const productsController = {
       if (list.length != 0) {
         return res.status(200).json(list);
       } else {
-        return res.status(200).json({
-          msg: "Not found products ",
-        });
+        return res.status(200).json({msg: "Not found products ",});
       }
     } catch (error) {
       return res.status(500).json({
@@ -63,7 +61,7 @@ const productsController = {
       let searchById = await db.products.findByPk(req.params.id);
       res.send(searchById.dataValues);
     } catch (error) {
-      res.status(401).json({
+      res.status(404).json({
         msg: "Not found product",
       });
     }
@@ -71,9 +69,9 @@ const productsController = {
   create: async (req, res) => {
     //agregar un nuevo producto a la bd
     let {
-      title = "un Titulo",
-      description = "unaDescr",
-      price = 50,
+      title = "",
+      description = "",
+      price = 0,
       category_id = 100,
       most_wanted = 0,
       stock = 1,
@@ -81,8 +79,15 @@ const productsController = {
     if (!title || !price) {
       return res
         .status(400)
-        .json({ msg: "Para crear el producto se necesitan mas datos" });
+        .json({ msg: "Need more data" });
+       
     } else {
+      if(price < 0){
+        return res
+        .status(400)
+        .json({ msg: "Price must be positive" });
+        
+      }
       let newProduct = {
         title,
         description,
@@ -92,8 +97,8 @@ const productsController = {
         stock,
       };
       try {
-        await db.products.create(newProduct);
-        res.status(200).json(newProduct);
+        let product = await db.products.create(newProduct);
+        res.status(200).json(product);
       } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -121,9 +126,9 @@ const productsController = {
         let idProducto = req.params.id;
         await db.products.update(newProduct, { where: { id: idProducto } });
 
-        res.json(newProduct);
+        res.status(200).json(newProduct);
       } else {
-        res.status(500).json({
+        res.status(404).json({
           msg: "Not found id",
         });
       }
