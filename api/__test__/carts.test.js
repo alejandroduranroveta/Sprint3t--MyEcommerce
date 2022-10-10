@@ -93,6 +93,22 @@ describe('Carts /api/v2/carts', () => {
             });
             expect(response.statusCode).toBe(400)
         });
+        test('Actualiza a un cart con muchos productos y cantidades', async () => {
+            const response = await request(app).put(rutaGet).auth(token, {type: 'bearer'}).send({
+                cart : [{
+                    product: 1,
+                    quantity: 2
+                },{
+                    product: 2,
+                    quantity: 3
+                },
+                {
+                    product: 3,
+                    quantity: 2
+                }]
+            });
+            expect(response.statusCode).toBe(200)
+        });
     })
 
 });
