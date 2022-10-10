@@ -98,9 +98,17 @@ const editCart = async (req, res) => {
         products.forEach(p => {
             productList.push(p.dataValues)
         });
+
+        if(cart && cart.length > 0){
         cart.forEach(c => {
             let product = productList.find(p => p.id == c.product);
-            if(product.stock >= c.quantity){
+            if(!product){
+                error = true;
+                return res.status(404).json({
+                    msg : `Producto de id ${c.product} no existe.`
+                })
+            }
+            else if(product.stock >= c.quantity){
                 db.carts_has_products.create({
                     products_id: c.product,
                     carts_id: id,
@@ -113,7 +121,7 @@ const editCart = async (req, res) => {
                     msg: `No hay suficiente del producto ${product.title}, hay stock de: ${product.stock}`
                 })
             }
-        });
+        })};
         if(!error){
             res.status(200).json({
                 msg: 'Cart updated'
@@ -121,29 +129,6 @@ const editCart = async (req, res) => {
         }
     } catch (err) {
         console.log(err);
-        res.status(500).json({
-            msg: 'Server error'
-        })
-    }
-}
-
-const addToCart = (req, res) => {
-    const { id } = req.dataToken;
-    const { product, quantity } = req.body;
-    const cartId = getCartIdByUserId(id);
-
-    try {
-        db.carts_has_products.create({
-            product_id: product,
-            carts_id: cartId,
-            quantity: quantity
-        }).then(r => {
-            res.status(200).json({
-                msg: 'Item added'
-            });
-        })
-    } catch (error) {
-        console.log(error);
         res.status(500).json({
             msg: 'Server error'
         })
