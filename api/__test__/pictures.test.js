@@ -15,16 +15,16 @@ describe('ENDPOINTS TEST', () => {
     describe('GET', () => {
 
         describe('Status 200', () => {
-            test('Devuelve imágen con ID 23 si existe, RUTA /pictures/23', async () => {
-                const response = await request(app).get('/api/v2/pictures/23').auth(token, { type: 'bearer' });
+            test('Devuelve imágen con ID 1 si existe, RUTA /pictures/1', async () => {
+                const response = await request(app).get('/api/v2/pictures/1').auth(token, { type: 'bearer' });
                 expect(response.statusCode).toBe(200);
             });
-            test('Devuelve las imágenes asociadas al producto con ID 3, RUTA /products/3/pictures', async () => {
+            test('Devuelve las imágenes asociadas al producto con ID 1, RUTA /products/1/pictures', async () => {
                 const response = await request(app).get('/api/v2/products/3/pictures').auth(token, { type: 'bearer' });
                 expect(response.statusCode).toBe(200);
             });
-            test('Devuelve las imágenes asociadas al producto con ID 3, QUERY /pictures/?product_id=3', async () => {
-                const response = await request(app).get('/api/v2/pictures/?product_id=3').auth(token, { type: 'bearer' });
+            test('Devuelve las imágenes asociadas al producto con ID 1, QUERY /pictures/?product_id=1', async () => {
+                const response = await request(app).get('/api/v2/pictures/?product_id=1').auth(token, { type: 'bearer' });
                 expect(response.statusCode).toBe(200);
             });
         });
@@ -92,13 +92,13 @@ describe('ENDPOINTS TEST', () => {
         /*----------------------------------------------------------------*/
         describe('PUT', () => {
             describe('Status 200', () => {
-                test('Modificar una imágen, RUTA /pictures/23', async () => {
+                test('Modificar una imágen, RUTA /pictures/3', async () => {
                     const pictureTest = {
                         img: "www.exampleimg.com/abcabc" + randomNum,
                         description: "imagen de prueba",
                         product_id: 2
                     };
-                    const response = await request(app).put('/api/v2/pictures/23').send(pictureTest).auth(token, { type: 'bearer' });
+                    const response = await request(app).put('/api/v2/pictures/3').send(pictureTest).auth(token, { type: 'bearer' });
                     expect(response.statusCode).toBe(200);
                 });
             });
@@ -114,16 +114,16 @@ describe('ENDPOINTS TEST', () => {
                         description: "imagen de prueba",
                         product_id: ""
                     };
-                    const response = await request(app).put('/api/v2/pictures/23').send(pictureTest).auth(token, { type: 'bearer' });
+                    const response = await request(app).put('/api/v2/pictures/3').send(pictureTest).auth(token, { type: 'bearer' });
                     expect(response.statusCode).toBe(400);
                 });
-                test('La URL es obligatoria (img), RUTA /pictures/23', async () => {
+                test('La URL es obligatoria (img), RUTA /pictures/3', async () => {
                     const pictureTest = {
                         img: "",
                         description: "imagen de prueba",
                         product_id: 2
                     };
-                    const response = await request(app).put('/api/v2/pictures/23').send(pictureTest).auth(token, { type: 'bearer' });
+                    const response = await request(app).put('/api/v2/pictures/3').send(pictureTest).auth(token, { type: 'bearer' });
                     expect(response.statusCode).toBe(400);
                 });
             });
@@ -176,19 +176,19 @@ describe('TOKEN TEST', () => {
     describe('GET', () => {
         describe('Status 200', () => {
             test('Token correcto', async () => {
-                const response = await request(app).get("/api/v2/pictures/23").auth(token, { type: 'bearer' });
+                const response = await request(app).get("/api/v2/pictures/1").auth(token, { type: 'bearer' });
                 expect(response.statusCode).toBe(200);
             });
         });
         describe('Status 401', () => {
             test('Token vencido', async () => {
-                const response = await request(app).get("/api/v2/pictures/23").auth(tokenVencido, { type: 'bearer' });
+                const response = await request(app).get("/api/v2/pictures/1").auth(tokenVencido, { type: 'bearer' });
                 expect(response.statusCode).toBe(401);
             });
         });
         describe('Status 400', () => {
             test('Token faltante', async () => {
-                const response = await request(app).get("/api/v2/pictures/23");
+                const response = await request(app).get("/api/v2/pictures/1");
                 expect(response.statusCode).toBe(400);
             });
         });
@@ -230,43 +230,43 @@ describe('TOKEN TEST', () => {
             product_id: 2
         };
         test('Token correcto', async () => {
-            const response = await request(app).put('/api/v2/pictures/23').send(pictureTest).auth(token, { type: 'bearer' });
+            const response = await request(app).put('/api/v2/pictures/3').send(pictureTest).auth(token, { type: 'bearer' });
             expect(response.statusCode).toBe(200);
         });
         test('Token vencido', async () => {
-            const response = await request(app).put('/api/v2/pictures/23').send(pictureTest).auth(tokenVencido, { type: 'bearer' });
+            const response = await request(app).put('/api/v2/pictures/3').send(pictureTest).auth(tokenVencido, { type: 'bearer' });
             expect(response.statusCode).toBe(401);
         });
         test('Token faltante', async () => {
-            const response = await request(app).put('/api/v2/pictures/23').send(pictureTest);
+            const response = await request(app).put('/api/v2/pictures/3').send(pictureTest);
             expect(response.statusCode).toBe(400);
         });
     });
 
     describe('DELETE', () => {
         let newPicture;
+        let id;
         test('Token correcto', async () => {
-                const pictureTest = {
-                    img: "www.imagen.com/" + randomNum,
-                    description: "Ejemplo de una descriptción",
-                    product_id: 1
-                }
-                newPicture = await request(app).post('/api/v2/pictures').send(pictureTest).auth(token, { type: 'bearer' });
-                const id = newPicture._body.pic.id;
-                const response = await request(app).delete(`/api/v2/pictures/${id}`).auth(token, { type: 'bearer' });
-                expect(response.statusCode).toBe(200);
-            });
+            const pictureTest = {
+                img: "www.imagen.com/" + randomNum,
+                description: "Ejemplo de una descriptción",
+                product_id: 1
+            }
+            newPicture = await request(app).post('/api/v2/pictures').send(pictureTest).auth(token, { type: 'bearer' });
+            id = newPicture._body.pic.id;
+            const response = await request(app).delete(`/api/v2/pictures/${id}`).auth(token, { type: 'bearer' });
+            expect(response.statusCode).toBe(200);
         });
         test('Token vencido', async () => {
-            const response = await request(app).delete('/api/v2/pictures/23').auth(tokenVencido, { type: 'bearer' });
+            const response = await request(app).delete(`/api/v2/pictures/${id}`).auth(tokenVencido, { type: 'bearer' });
             expect(response.statusCode).toBe(401);
         });
         test('Token faltante', async () => {
-            const response = await request(app).delete('/api/v2/pictures/23')
+            const response = await request(app).delete(`/api/v2/pictures/${id}`)
             expect(response.statusCode).toBe(400);
         });
-
     });
+});
 
 
 
