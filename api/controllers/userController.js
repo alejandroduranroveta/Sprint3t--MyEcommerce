@@ -58,11 +58,11 @@ const userController = {
 				attributes: { exclude: ['password'] }
 			});
 			if (searchById != null) {
-				res.status(200).json(searchById);
+				return res.status(200).json(searchById);
 			} else if (!isNaN(req.params.id)) {
-				res.status(404).json({ msg: "Not fund user" });
+				return res.status(404).json({ msg: "Not fund user" });
 			} else {
-				res
+				return res
 					.status(400)
 					.json({
 						msg: `'${req.params.id}' that is not a valid id, try with something else numerical`,
@@ -97,7 +97,7 @@ const userController = {
 				username
 			};
 			await db.users.create(newUser);
-			await createCart(username);
+			//await createCart(username);
 			res.status(201).json(newUser)
 		} catch (error) {
 			console.log(error);
@@ -130,13 +130,17 @@ const userController = {
 			let idUser = req.params.id;
 			if (idUser !== null && !isNaN(idUser)) {
 				const userDeleted = await db.users.findByPk(idUser);
-				await removeCart(idUser);
-				await db.users.destroy({
-					where: {
-						id: idUser
-					}
-				});
-				res.status(200).json(userDeleted);
+				//await removeCart(idUser);
+				if (userDeleted!==null) {
+					await db.users.destroy({
+						where: {
+							id: idUser
+						}
+					});
+					return res.status(404).json(userDeleted);
+				} else {
+					return res.status(404).json({ msg: "Not fund user" });
+				}
 			} else if (!isNaN(idUser)) {
 				return res.status(404).json({ msg: "Not fund user" });
 			} else {
