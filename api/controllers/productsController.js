@@ -47,9 +47,7 @@ const productsController = {
       if (list.length != 0) {
         return res.status(200).json(list);
       } else {
-        return res.status(200).json({
-          msg: "Not found products ",
-        });
+        return res.status(200).json({msg: "Not found products ",});
       }
     } catch (error) {
       return res.status(500).json({
@@ -128,7 +126,7 @@ const productsController = {
         let idProducto = req.params.id;
         await db.products.update(newProduct, { where: { id: idProducto } });
 
-        res.json(newProduct);
+        res.status(200).json(newProduct);
       } else {
         res.status(404).json({
           msg: "Not found id",

@@ -1,5 +1,7 @@
 const { app, server } = require('../../server');
 const request = require('supertest');
+var sinon = require('sinon');
+var responseMock = sinon.mock(response);
 
 afterEach(() => {
     server.close();
@@ -12,26 +14,26 @@ const tokenVencido = "123";
 describe('TEST EXITO 200 ', () => {
     describe('GET', () => {
         
-        test('ruta /products', async () => {
+        test('get /products', async () => {
             const response = await request(app).get('/api/v2/products').auth(token,{ type: 'bearer' });
             expect(response.statusCode).toBe(200);
         });
         
-        test('ruta /products/ID', async () => {
+        test('get /products/ID', async () => {
             const response = await request(app).get('/api/v2/products/1').auth(token, { type: 'bearer' });
             expect(response.statusCode).toBe(200);
         });
         
-        test('ruta /search', async () => {
+        test('get /search', async () => {
             const response = await request(app).get('/api/v2/products/search?q=alcon').auth(token, { type: 'bearer' });
             expect(response.statusCode).toBe(200);
         });
-        test('ruta /category', async () => {
+        test('get /category', async () => {
             const response = await request(app).get('/api/v2/products?category=1').auth(token, { type: 'bearer' });
             expect(response.statusCode).toBe(200);
         });
 
-        test('ruta /mostwanted', async () => {
+        test('get /mostwanted', async () => {
             const response = await request(app).get('/api/v2/products/mostwanted').auth(token, { type: 'bearer' });
             expect(response.statusCode).toBe(200);
         });
@@ -50,7 +52,7 @@ describe('TEST EXITO 200 ', () => {
         });
     });
     describe('PUT', () => {
-        test.skip('/products', async () => {
+        test('/products', async () => {
             const response = await request(app).put('/api/v2/products/50').send({
                 "title": "unProductoModificado",
                 "description": "1",
@@ -115,7 +117,7 @@ describe('TOKEN VENCIDO ', () => {
 });
     /******************************************************** */
     
-describe('GET,PUT 404 TEST =', () => {
+describe('GET 404 TEST =', () => {
     describe('GET', () => {
         test.skip('lista de todos los productos vacia ', async () => {
             const response = await request(app).get('/api/v2/products').auth(token, { type: 'bearer' });
@@ -135,8 +137,10 @@ describe('GET,PUT 404 TEST =', () => {
             expect(response.statusCode).toBe(404);
         });
     });    
+
+    
     /************************** */
-    describe('PUT', () => {
+    describe('PUT 400 TEST', () => {
             test('id invalido para modificar ', async () => {
                 const response = (await request(app).put('/api/v2/products/9898')
                 .send({
@@ -145,11 +149,20 @@ describe('GET,PUT 404 TEST =', () => {
                 })
                 .auth(token, { type: 'bearer' }));
                 expect(response.statusCode).toBe(404);
-            });
+            });    
+            test('id null para modificar ', async () => {
+                const response = (await request(app).put('/api/v2/products/a')
+                .send({
+                    "title": "un product",
+                    "price": 1,
+                })
+                .auth(token, { type: 'bearer' }));
+                expect(response.statusCode).toBe(404);
+            });      
 });
-describe('NEED MORE INFO TEST - ERROR 400', () => {
-        describe('POST', () => {
-            test('ruta /products', async () => {
+describe('NEED CORRECT INFO TEST - ERROR 400', () => {
+        describe('POST - c', () => {
+            test('sin titulo - se espera 400 ', async () => {
                 const response = await request(app).post('/api/v2/products').send({
                         "title": "",
                         "price": 1,
@@ -157,18 +170,22 @@ describe('NEED MORE INFO TEST - ERROR 400', () => {
                 .auth(token, { type: 'bearer' });
                 expect(response.statusCode).toBe(400);
             });
-        
-            test('ruta /products', async () => {
+            test('sin precio - se espera 400 ', async () => {
                 const response = await request(app).post('/api/v2/products').send({
-                        "title": "productinho",
-                        "description": "",
-                        "price": -1,
-                        "category_id": 1,
-                        "most_wanted": 0,
-                        "stock": 1
-                });
+                        "title": "sin precio"
+                })
+                .auth(token, { type: 'bearer' });
                 expect(response.statusCode).toBe(400);
             });
+            test('precio negativo - se espera 400 ', async () => {
+                const response = await request(app).post('/api/v2/products').send({
+                        "title": "sin precio",
+                        "price": -2,
+                })
+                .auth(token, { type: 'bearer' });
+                expect(response.statusCode).toBe(400);
+            });
+            
             test('ruta /products', async () => {
                 const response = await request(app).post('/api/v2/products').send({
                         "title": "productinho",
@@ -185,32 +202,8 @@ describe('NEED MORE INFO TEST - ERROR 400', () => {
                         "title": "productinho",
                         "description": "",
                         "price": -1,
-                        "category_id": 1,
-                        "most_wanted": 0,
-                        "stock": 1
-                    
-                });
-                expect(response.statusCode).toBe(400);
-            });
-            test('ruta /products', async () => {
-                const response = await request(app).post('/api/v2/products').send({
-                        "title": "productinho",
-                        "description": "",
-                        "price": -1,
                         "category_id": 1999999,
                         "most_wanted": 0,
-                        "stock": -1
-                });
-                expect(response.statusCode).toBe(400);
-            });
-
-            test.skip('ruta /products', async () => {
-                const response = await request(app).post('/api/v2/products').send({
-                        "title": "productinho",
-                        "description": "One Description",
-                        "price": 1,
-                        "category_id": 1,
-                        "most_wanted": a,
                         "stock": -1
                 });
                 expect(response.statusCode).toBe(400);
@@ -230,6 +223,70 @@ describe('NEED MORE INFO TEST - ERROR 400', () => {
             });
         });
     });
+
+
+
+
+    describe('TEST FAIL 500 - Interrupcion ', () => {
+        describe('GET', () => {
+            
+            test.skip('get /products', async () => {
+                const response = await request(app).get('/api/v2/products').auth(token,{ type: 'bearer' });
+                expect(response.statusCode).toBe(500);
+            });
+            
+            test.skip('get /products/ID', async () => {
+                const response = await request(app).get('/api/v2/products/1').auth(token, { type: 'bearer' });
+                expect(response.statusCode).toBe(500);
+            });
+            
+            test.skip('get /search', async () => {
+                const response = await request(app).get('/api/v2/products/search?q=alcon').auth(token, { type: 'bearer' });
+                expect(response.statusCode).toBe(500);
+            });
+            test.skip('get /category', async () => {
+                const response = await request(app).get('/api/v2/products?category=1').auth(token, { type: 'bearer' });
+                expect(response.statusCode).toBe(500);
+            });
+    
+            test.skip('get /mostwanted', async () => {
+                const response = await request(app).get('/api/v2/products/mostwanted').auth(token, { type: 'bearer' });
+                expect(response.statusCode).toBe(500);
+            });
+        });
+        describe('POST', () => {
+            test.skip('/products', async () => {
+                const response = await request(app).post('/api/v2/products').send({
+                    "title": "unProducto",
+                    "description": "1",
+                    "category_id": 1,
+                    "price": 1,
+                    "stock": 1,
+                    "most_wanted": 1,
+                }).auth(token, { type: 'bearer' });
+                expect(response.statusCode).toBe(500);
+            });
+        });
+        describe('PUT', () => {
+            test.skip('/products', async () => {
+                const response = await request(app).put('/api/v2/products/50').send({
+                    "title": "unProductoModificado",
+                    "description": "1",
+                    "category_id": 1,
+                    "price": 1,
+                    "stock": 1,
+                    "most_wanted": 1,
+                }).auth(token, { type: 'bearer' });
+                expect(response.statusCode).toBe(500);
+            })
+        });
+        describe('DELETE', () => {
+            test.skip('Route status-ruta /products', async () => {
+                const response = await request(app).delete('/api/v2/products/1').auth(token, { type: 'bearer' });
+                expect(response.statusCode).toBe(500);
+            });
+        });
+    });
  
 //errores 500 hay que ver como hacerlo
 
@@ -237,3 +294,20 @@ describe('NEED MORE INFO TEST - ERROR 400', () => {
         //     const response = await request(app).get('/api/v2/products');
         //     expect(response.statusCode).toBe(500);
  //});
+ //create error 500
+
+ //put modify 500 linea 138
+
+ //mostwantes sin ninguno correcto
+
+
+//  describe('/api/search route', () => {
+//     it('should return a 500 when an error is encountered', async () => {
+//       // stub an error
+//       sinon.stub(itemQueries, 'search').throws(Error('db query failed'))
+  
+//       await request(app) // pass Express app to supertest
+//         .post('/api/search') // call Express route we want to test
+//         .send({term: 'blah', num: 1}) // pass normally expected, valid data in request body
+//         .expect(500) // assert that we return a HTTP 500 response status code
+//     })
