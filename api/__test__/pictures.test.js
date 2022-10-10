@@ -275,7 +275,7 @@ describe('DATA TYPES TEST', () => {
 
     describe('GET', () => {
         test('Tipos de datos correctos en body (PIC)', async () => {
-            const response = await request(app).get('/api/v2/pictures/200').send({
+            const response = await request(app).get('/api/v2/pictures/3').send({
             }).auth(token, { type: 'bearer' });
             expect(response.body.pic).toEqual(expect.objectContaining({
                 img: expect.any(String),
@@ -303,7 +303,7 @@ describe('DATA TYPES TEST', () => {
     describe('PUT', () => {
         test('Tipos de datos correctos en body (diferentes a la bd)', async () => {
             let randomNum = Math.random(100);
-            const response = await request(app).put('/api/v2/pictures/13').send({
+            const response = await request(app).put('/api/v2/pictures/3').send({
                 product_id: 3,
                 img: "www.example.com/" + randomNum,
                 description: "example description",
