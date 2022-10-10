@@ -46,29 +46,22 @@ const picturesController = {
         description,
         product_id,
 
-      }).catch(err => {
-
-        console.log(err);
-        if (!product) {
-          return res
-            .status(400).json({
-              msg: "Product not found"
-            });
-        }
+      }).catch(err => {        
+      console.log(err);
+      if (!product) {
         return res
-          .status(400).json({ msg: "Invalid values" });
+        .status(400).json({
+          msg: "Product not found"
+        });
+      }
+        return res
+        .status(400).json({msg: "Invalid values" });
       });
-
-      return (pic != 0)
-        ? res.status(201).json({
+      return res.status(201).json({
           msg: "Image has been created",
           pic,
-        })
-        : res.status(500).json({
-          msg: "Unexpected error when creating image.",
         });
     } catch (error) {
-      console.log(error);
       return res
         .status(500)
         .json({ msg: "Internal error when trying to create images." });
