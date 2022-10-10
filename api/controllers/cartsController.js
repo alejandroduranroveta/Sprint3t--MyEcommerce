@@ -98,9 +98,17 @@ const editCart = async (req, res) => {
         products.forEach(p => {
             productList.push(p.dataValues)
         });
+
+        if(cart && cart.length > 0){
         cart.forEach(c => {
             let product = productList.find(p => p.id == c.product);
-            if(product.stock >= c.quantity){
+            if(!product){
+                error = true;
+                return res.status(404).json({
+                    msg : `Producto de id ${c.product} no existe.`
+                })
+            }
+            else if(product.stock >= c.quantity){
                 db.carts_has_products.create({
                     products_id: c.product,
                     carts_id: id,
@@ -113,7 +121,7 @@ const editCart = async (req, res) => {
                     msg: `No hay suficiente del producto ${product.title}, hay stock de: ${product.stock}`
                 })
             }
-        });
+        })};
         if(!error){
             res.status(200).json({
                 msg: 'Cart updated'

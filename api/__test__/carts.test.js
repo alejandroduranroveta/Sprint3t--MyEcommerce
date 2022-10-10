@@ -8,6 +8,7 @@ afterEach(() => {
 const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY0ODI2MTk2LCJleHAiOjE2NjU2OTAxOTZ9.p202gFqeJop5Qs6kpbSL5e-9VFFEZRPWG7AczE9UhxxeF7TB5b-U0lWyiY0oWIv9OrtadEvBF77oESRJFGiSAw";
 const tokenVencido = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY0Mzc1MDMyLCJleHAiOjE2NjQzNzg2MzJ9.ewdeBDT7nmLNgK0FDT_hn5YMm0ptgKcRbVRPff0NVSL20ekylx9_7IUgwHJhvqVWz7-K-Y8jGko89NPEirv7Nw";
 const rutaGet = '/api/v2/carts/1';
+const rutaPut = 'api/v2/carts/1';
 
 describe('Carts /api/v2/carts', () => {
     describe('GET /carts Autenticacion', () => {
@@ -55,5 +56,43 @@ describe('Carts /api/v2/carts', () => {
                 )
             })
         });
+    });
+
+    describe('PUT /carts', () => {
+        test('Actualiza a un cart vacio', async () => {
+            const response = await request(app).put(rutaGet).auth(token, {type: 'bearer'});
+            expect(response.statusCode).toBe(200);
+        });
+        test('Actualiza a un cart con productos y cantidades', async () => {
+            const response = await request(app).put(rutaGet).auth(token, {type: 'bearer'}).send({
+                cart : [{
+                    product: 1,
+                    quantity: 2
+                },{
+                    product: 2,
+                    quantity: 3
+                }]
+            });
+            expect(response.statusCode).toBe(200)
+        });
+        test('Actualiza a un cart con producto inexistente y cantidades', async () => {
+            const response = await request(app).put(rutaGet).auth(token, {type: 'bearer'}).send({
+                cart : [{
+                    product: 999,
+                    quantity: 2
+                }]
+            });
+            expect(response.statusCode).toBe(404)
+        });
+        test('Actualiza a un cart con producto existente y cantidades muy altas', async () => {
+            const response = await request(app).put(rutaGet).auth(token, {type: 'bearer'}).send({
+                cart : [{
+                    product: 1,
+                    quantity: 9000
+                }]
+            });
+            expect(response.statusCode).toBe(400)
+        });
     })
+
 });
