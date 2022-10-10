@@ -72,17 +72,12 @@ describe('TEST EXITO 200 ', () => {
     });
     
     describe('DELETE', () => {
-        
         test('delete producto con sus pictures   ', async () => {
-
             const response = await request(app).delete(`/api/v2/products/${Idproducts}`).auth(token, { type: 'bearer' });
             expect(response.statusCode).toBe(200);
         });
     });
 });
-
-/******************************************************** */
-
 
 describe('TOKEN VENCIDO ', () => {
     describe('GET', () => {
@@ -124,7 +119,6 @@ describe('TOKEN VENCIDO ', () => {
         });
     });
 });
-    /******************************************************** */
     
 describe('GET 404 TEST =', () => {
     describe('GET', () => {
@@ -147,8 +141,6 @@ describe('GET 404 TEST =', () => {
         });
     });    
 
-    
-    /************************** */
     describe('PUT 400 TEST', () => {
             test('id invalido para modificar ', async () => {
                 const response = (await request(app).put('/api/v2/products/9898')
@@ -233,9 +225,6 @@ describe('NEED CORRECT INFO TEST - ERROR 400', () => {
         });
     });
     
-    beforeEach(() => {
-        server.close();
-    });
 describe('TEST FAIL 500 - Interrupcion ', () => {
         describe('GET', () => {
             
