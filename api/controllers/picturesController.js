@@ -2,7 +2,6 @@ const db = require("../../database/models");
 
 const picturesController = {
   detail: async (req, res) => {
-    //detalle de picture por id, por ruta '/products/:id'
     try {
       const id = req.params.id;
       if (isNaN(id) || id <= 0) {
@@ -19,7 +18,6 @@ const picturesController = {
           .json({ msg: "These images have been found:", pic });
       }
     } catch (error) {
-      console.log(error);
       return res
         .status(500)
         .json({ msg: "Internal error when trying to find images.", error });
@@ -31,7 +29,7 @@ const picturesController = {
     try {
       const { img, description, product_id } = req.body;
       if (!img) {
-        res.status(400).json({ msg: "The URL of the image is required." });
+        return res.status(400).json({ msg: "The URL of the image is required." });
       }
       if (isNaN(product_id) || product_id <= 0) {
         return res
@@ -40,14 +38,15 @@ const picturesController = {
             msg: "The 'product_id' is not found or must be a valid number",
           });
       }
-      
+
       const product = await db.products.findByPk(product_id);
-      
+
       const pic = await db.pictures.create({
         img,
         description,
         product_id,
-      }).catch(err => {
+
+      }).catch(err => {        
       console.log(err);
       if (!product) {
         return res
@@ -58,17 +57,11 @@ const picturesController = {
         return res
         .status(400).json({msg: "Invalid values" });
       });
-      
-      return (pic != 0)
-        ? res.status(201).json({
-            msg: "Image has been created",
-            pic,
-          })
-        : res.status(500).json({
-            msg: "Unexpected error when creating image.",
-          });
+      return res.status(201).json({
+          msg: "Image has been created",
+          pic,
+        });
     } catch (error) {
-      console.log(error);
       return res
         .status(500)
         .json({ msg: "Internal error when trying to create images." });
@@ -76,13 +69,12 @@ const picturesController = {
   },
 
   modify: async (req, res) => {
-    //modificar imagen por ruta '/products/:id'
+    //modificar imagen por ruta '/pictures/:id'
     try {
       const id = req.params.id;
       if (isNaN(id) || id <= 0) {
         return res.status(400).json({ msg: "The ID must be a valid number." });
       }
-
       const { img, description, product_id } = req.body;
 
       if (!img) {
@@ -98,29 +90,42 @@ const picturesController = {
           });
       }
 
-      const picMod = await db.pictures.update(
-        {
-          img,
-          description,
-          product_id,
-        },
-        {
-          where: {
-            id,
-          },
-        }
-      );
-
-      return picMod != 0
-        ? res.status(200).json({
-            msg: "Image has been modified",
+      const imgDataBase = await db.pictures.findByPk(id);
+      if (!imgDataBase) {
+        return res.status(400).json({
+          msg: "No image was modified, check that the ID is correct.",
+        });
+      }
+      if (product_id !== imgDataBase.product_id || img !== imgDataBase.img || description !== imgDataBase.description) {
+        await db.pictures.update(
+          {
             img,
             description,
             product_id,
-          })
-        : res.status(400).json({
-            msg: "No image was modified, check that the ID is correct.",
-          });
+          },
+          {
+            where: {
+              id,
+            },
+          }
+        );
+
+        return res.status(200).json({
+          msg: "Image has been modified",
+          img,
+          description,
+          product_id,
+        });
+      }else{
+        return res.status(200).json({
+          msg: "Image cannot be modified because it is the same as the original",
+          img,
+          description,
+          product_id,
+        });
+      }
+      
+
     } catch (error) {
       return res
         .status(500)
@@ -129,7 +134,7 @@ const picturesController = {
   },
 
   deleted: async (req, res) => {
-    //eliminar imagen por ruta '/products/:id'
+    //eliminar imagen por ruta '/pictures/:id'
     const id = req.params.id;
     try {
       const picDel = await db.pictures.destroy({
@@ -140,9 +145,9 @@ const picturesController = {
 
       return picDel != 0
         ? res.status(200).json({
-            msg: "Image has been deleted",
-            picDel,
-          })
+          msg: "Image has been deleted",
+          picDel,
+        })
         : res.status(400).json({ msg: "The image could not be deleted." });
     } catch (error) {
       return res.status(500).json({
@@ -193,7 +198,7 @@ const picturesController = {
           .json({ msg: "Internal error when trying to list images.", error });
       }
     }
-    
+
     //busqueda por query 'pictures/?product_id=id'
     const product_id = req.query.product_id;
     if (product_id) {
