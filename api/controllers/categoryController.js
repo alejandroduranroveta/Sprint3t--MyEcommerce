@@ -14,7 +14,7 @@ const categoryController ={
             }
         } catch (errors) {
             res.status(500).json({msg: "Database error"});
-            console.log(errors);
+            //console.log(errors);
         }
     },
     create: async (req, res) => {
@@ -24,10 +24,9 @@ const categoryController ={
                 name
             }
             let newCategory = await db.category.create(category);
-            //console.log(Number(newCategory.dataValues.id));
             res.status(200).json(newCategory);
         } catch (errors) {
-            console.log(errors);
+            //console.log(errors);
             res.status(500).json({msg: "Error creating category"});
         }
     },
@@ -35,7 +34,6 @@ const categoryController ={
         const id  = req.params.id;
         try {        
             let deletedCategory = await db.category.findByPk(id);
-            console.log(deletedCategory)
             if(deletedCategory) {
                 await db.category.destroy({
                     where:{id}
@@ -45,7 +43,7 @@ const categoryController ={
                 return res.status(404).json({ msg: "Not found category" });
             }
         }catch (err) {
-            console.log(err);
+            //console.log(err);
             res.status(500).json({msg: "Error database"});
         }
     }

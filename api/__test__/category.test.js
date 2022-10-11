@@ -5,17 +5,19 @@ afterEach(() => {
     server.close();
 });
 
+let randomNum = Math.floor(Math.random()*9999);
+
 describe('TEST EXITO 200 ', () => {
     describe('GET', () => {
         test('get /category', async () => {
             const response = await request(app).get('/api/v2/category');
             expect(response.statusCode).toBe(200);
             });
-
-    describe.skip('POST', () => {
+        });
+    describe('POST', () => {
         test('/category', async () => {
             const response = await request(app).post('/api/v2/category').send({
-                "name": 'prueba  2',
+                "name": 'prueba '+ randomNum,
             });
             expect(response.statusCode).toBe(200);
         });
@@ -32,8 +34,7 @@ describe('TEST EXITO 200 ', () => {
             });
         });
 });
-});
-describe.skip('TEST VALORES INVALIDOS',() => {
+describe('TEST VALORES INVALIDOS',() => {
     describe('DELETE', () => {
         test('delete category id invalida  ', async () => {
             const response = await request(app).delete(`/api/v2/category/696969`);

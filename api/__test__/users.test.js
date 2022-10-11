@@ -4,8 +4,8 @@ const request = require('supertest');
 afterEach(() => {
     server.close();
 });
-const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY1NDk4NzExLCJleHAiOjM3NjY1NDk1MTExfQ.o6kZts3lbK_lgYk_csR1ob7Dy52QG5ughC0mOxLGS4wl0PUhZDM62afrHmeHYr1g5zp17L2WSvAGDKh0oY88Sg";
-const numberRandom = Math.floor(Math.random() *100);
+const token = process.env.TOKEN;
+const numberRandom = Math.floor(Math.random() *9999);
 describe('TEST USERS ENDPOINTS STATUS OK', () => {
     describe('GET', () => {
         test('Route status OK /users', async () => {
@@ -56,7 +56,7 @@ describe('TEST USERS ENDPOINTS STATUS OK', () => {
             const newUser = await request(app).post('/api/v2/users').send({
                 first_name:"mmmmmm",
                 last_name:"mmmmmm",
-                email:"xxxxxxxxx@outlook.com",
+                email:"xxxxxxxeex@outlook.com",
                 username:"mmmmmm",
                 password:"123456",
                 profile_pic:"https://ibb.co/zF5mrtX",
@@ -198,7 +198,7 @@ describe('TEST USERS ENDPOINT DATA', () => {
             const newUser = await request(app).post('/api/v2/users').send({
                 first_name:"mmmmmm",
                 last_name:"mmmmmm",
-                email:"qqqqqq@outlook.com",
+                email:"qqqqqqk@outlook.com",
                 username:"mmmmmm",
                 password:"123456",
                 profile_pic:"https://ibb.co/zF5mrtX",

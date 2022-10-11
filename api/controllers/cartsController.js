@@ -7,7 +7,7 @@ const createCart = async username => {
         user_id
     }).then(r => {
         return r;
-    }).catch(err => console.log(err))
+    }).catch(/*err => console.log(err)*/)
 }
 
 const removeCart = async userId => {
@@ -29,8 +29,6 @@ const getCartIdFromUsername = async username => {
         })
         return user.id;
     } catch (err) {
-        console.log(err);
-        return null;
     }
 
 }
@@ -75,7 +73,7 @@ const cartById = async (req, res) => {
         })
         res.status(200).json(cart);
     } catch (error) {
-        console.log(error);
+        //console.log(error);
         res.status(500).json({
             msg: 'Server error'
         })
@@ -84,11 +82,12 @@ const cartById = async (req, res) => {
 
 const editCart = async (req, res) => {
     const { id } = req.dataToken;
+    const carts_id = await getCartIdByUserId(id);
     const cart = req.body.cart;
     let error = false;
     await db.carts_has_products.destroy({
         where: {
-            carts_id: id
+            carts_id
         }
     });
     try {
@@ -128,7 +127,7 @@ const editCart = async (req, res) => {
             });
         }
     } catch (err) {
-        console.log(err);
+        //console.log(err);
         res.status(500).json({
             msg: 'Server error'
         })

@@ -33,9 +33,10 @@ VALUES ('Muchas manzanas verdes que se ven deliciosas', 'https://ibb.co/PtQ9R3s'
 SET @idBruno = (SELECT id FROM users where username = 'brunof');
 SET @idAlvin = (SELECT id FROM users where username = 'alvin420');
 SET @idJeff = (SELECT id FROM users where username = 'jeffg');
+SET @idFede = (SELECT id FROM users where username = 'fdefortuny');
 
 INSERT INTO carts(user_id) 
-VALUES (@idBruno),(@idAlvin), (@idJeff);
+VALUES (@idBruno),(@idAlvin), (@idJeff), (@idFede);
 
 
 SET @idCartBruno = (SELECT id  FROM carts where user_id = @idBruno);
