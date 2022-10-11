@@ -96,9 +96,20 @@ const userController = {
 				role,
 				username
 			};
-			await db.users.create(newUser);
+			const userCreated = await db.users.create(newUser);
 			//await createCart(username);
-			res.status(201).json(newUser)
+			const {dataValues} = userCreated
+			let userNotPassword = {
+				id:dataValues.id,
+				email:dataValues.email,
+				name:dataValues.name,
+				first_name:dataValues.first_name,
+				last_name:dataValues.last_name,
+				profile_pic:dataValues.profile_pic,
+				role:dataValues.role,
+				username:dataValues.username,
+			};
+			res.status(201).json(userNotPassword)
 		} catch (error) {
 			console.log(error);
 			res.status(500).json({ msg: "Error database" });
@@ -128,16 +139,18 @@ const userController = {
 	delete: async (req, res) => {
 		try {
 			let idUser = req.params.id;
+			console.log(idUser);
 			if (idUser !== null && !isNaN(idUser)) {
 				const userDeleted = await db.users.findByPk(idUser);
 				//await removeCart(idUser);
+				
 				if (userDeleted!==null) {
 					await db.users.destroy({
 						where: {
 							id: idUser
 						}
 					});
-					return res.status(404).json(userDeleted);
+					return res.status(200).json(userDeleted);
 				} else {
 					return res.status(404).json({ msg: "Not fund user" });
 				}

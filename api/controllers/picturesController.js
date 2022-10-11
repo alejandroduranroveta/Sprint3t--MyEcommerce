@@ -40,27 +40,25 @@ const picturesController = {
       }
 
       const product = await db.products.findByPk(product_id);
-
+      let error = false;
       const pic = await db.pictures.create({
         img,
         description,
         product_id,
 
-      }).catch(err => {        
-      console.log(err);
-      if (!product) {
-        return res
-        .status(400).json({
-          msg: "Product not found"
-        });
-      }
-        return res
-        .status(400).json({msg: "Invalid values" });
+      }).catch(err => {
+        console.log(err);
+        error = true;
+          return res
+            .status(400).json({
+              msg: "Product not found"
+            });
       });
+      if(!error) {
       return res.status(201).json({
-          msg: "Image has been created",
-          pic,
-        });
+        msg: "Image has been created",
+        pic,
+      });}
     } catch (error) {
       return res
         .status(500)
@@ -116,15 +114,15 @@ const picturesController = {
           description,
           product_id,
         });
-      }else{
-        return res.status(200).json({
+      } else {
+        return res.status(400).json({
           msg: "Image cannot be modified because it is the same as the original",
           img,
           description,
           product_id,
         });
       }
-      
+
 
     } catch (error) {
       return res
