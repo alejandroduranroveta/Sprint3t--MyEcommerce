@@ -1,5 +1,7 @@
 const { app, server } = require('../../server');
 const request = require('supertest');
+var sinon = require("sinon");
+const db = require('../../database/models');
 
 afterEach(() => {
     server.close();
@@ -27,6 +29,12 @@ describe('Carts /api/v2/carts', () => {
         test('Token sin especificar bearer', async () => {
             const response = await request(app).get(rutaGet).auth(token);
             expect(response.statusCode).toEqual(401);
+        });
+        test('Error de servidor', async () => {
+            var stub = sinon.stub(db.carts, 'findByPk').throws();
+            const response = await request(app).get(rutaGet).auth(token, { type: 'bearer' });
+            stub.restore();
+            expect(response.statusCode).toEqual(500);
         })
     });
     describe('GET /carts DataTypes', () => {
@@ -109,6 +117,20 @@ describe('Carts /api/v2/carts', () => {
             });
             expect(response.statusCode).toBe(200)
         });
+        test('Error de servidor', async () => {
+            var stub = sinon.stub(db.carts_has_products, 'create').throws();
+            const response = await request(app).put(rutaGet).auth(token, {type: 'bearer'}).send({
+                cart : [{
+                    product: 1,
+                    quantity: 2
+                },{
+                    product: 2,
+                    quantity: 3
+                }]
+            });
+            stub.restore();
+            expect(response.statusCode).toEqual(500);
+        })
     })
 
 });
