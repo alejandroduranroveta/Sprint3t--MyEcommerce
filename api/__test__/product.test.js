@@ -320,7 +320,7 @@ describe("TEST FAIL  - Interrupcion ", () => {
       expect(response.statusCode).toBe(500);
     });
     test("get /:id/pictures", async () => {
-      let stub = sinon.stub(db.pictures, 'findAll').throws();
+      let stub = sinon.stub(db.pictures, 'findOne').throws();
       const response = await request(app)
         .get("/api/v2/products/2/pictures")
         .auth(token, { type: "bearer" });
