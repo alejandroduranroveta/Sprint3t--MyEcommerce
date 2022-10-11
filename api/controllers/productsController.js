@@ -100,7 +100,7 @@ const productsController = {
         let product = await db.products.create(newProduct);
         res.status(200).json(product);
       } catch (error) {
-        console.log(error);
+        //console.log(error);
         res.status(500).json({
           msg: "Server Error",
         });
@@ -149,7 +149,7 @@ const productsController = {
         res.status(200).json(searchMostWanted);
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       res.status(500).json({
         msg: "Server Error",
       });
@@ -172,7 +172,7 @@ const productsController = {
         });
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       res.status(500).json({
         msg: "Server Error",
       });

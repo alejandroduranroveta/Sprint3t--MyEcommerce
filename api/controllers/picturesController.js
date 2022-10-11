@@ -47,7 +47,7 @@ const picturesController = {
         product_id,
 
       }).catch(err => {
-        console.log(err);
+        //console.log(err);
         error = true;
           return res
             .status(400).json({
@@ -181,7 +181,7 @@ const picturesController = {
       }
 
       try {
-        const pics = await db.pictures.findAll({
+        const pics = await db.pictures.findOne({
           attributes: ["img", "description", "product_id"],
           where: {
             product_id: id,
@@ -204,7 +204,7 @@ const picturesController = {
         return res.status(400).json({ msg: "The ID must be a valid number." });
       }
       try {
-        const pics = await db.pictures.findAll({
+        const pics = await db.pictures.findOne({
           attributes: ["img", "description", "product_id"],
           where: {
             product_id,

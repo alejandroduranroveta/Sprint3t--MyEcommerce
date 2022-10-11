@@ -27,7 +27,7 @@ const userController = {
 				token,
 			});
 		} catch (error) {
-			console.log(error);
+			//console.log(error);
 			return res.status(500).json({
 				msg: "error",
 				error,
@@ -46,7 +46,7 @@ const userController = {
 				res.status(200).json({ msg: "Empy list" });
 			}
 		} catch (error) {
-			console.log(error);
+			//console.log(error);
 			res.status(500).json({
 				msg: "Error Database",
 			});
@@ -69,7 +69,7 @@ const userController = {
 					});
 			}
 		} catch (error) {
-			console.log(error);
+			//console.log(error);
 			res.status(500).json({ msg: "Error server:" });
 		}
 	},
@@ -111,7 +111,7 @@ const userController = {
 			};
 			res.status(201).json(userNotPassword)
 		} catch (error) {
-			console.log(error);
+			//console.log(error);
 			res.status(500).json({ msg: "Error database" });
 		}
 	},
@@ -132,14 +132,13 @@ const userController = {
 					});
 			}
 		} catch (error) {
-			console.log(error);
+			//console.log(error);
 			res.status(500);
 		}
 	},
 	delete: async (req, res) => {
 		try {
 			let idUser = req.params.id;
-			console.log(idUser);
 			if (idUser !== null && !isNaN(idUser)) {
 				const userDeleted = await db.users.findByPk(idUser);
 				await removeCart(idUser);
@@ -165,7 +164,7 @@ const userController = {
 			}
 		} catch (error) {
 			res.status(500);
-			console.log(error);
+			//console.log(error);
 		}
 	}
 };

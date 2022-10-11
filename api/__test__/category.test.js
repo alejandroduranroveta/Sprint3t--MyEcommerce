@@ -7,7 +7,7 @@ afterEach(() => {
     server.close();
 });
 
-let randomNum = Math.floor(Math.random()*100);
+let randomNum = Math.floor(Math.random()*9999);
 
 describe('TEST EXITO 200 ', () => {
     describe('GET', () => {
