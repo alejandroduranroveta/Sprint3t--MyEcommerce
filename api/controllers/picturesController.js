@@ -47,7 +47,7 @@ const picturesController = {
         product_id,
 
       }).catch(err => {
-        console.log(err);
+        //console.log(err);
         error = true;
           return res
             .status(400).json({

@@ -4,8 +4,8 @@ const request = require('supertest');
 afterEach(() => {
     server.close();
 });
-const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY1NTA5MzY2LCJleHAiOjM3NjY1NTA1NzY2fQ.d9BfFQ5jnBGJpNlQWWOHz_BRy3l1GXYyaEWr2yRPj7MTNcUk6TbyV23qX6DoHOSKszcd9cqfD3ebvZIdkRRd8g";
-const numberRandom = Math.floor(Math.random() *100);
+const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY1NTEzMjEwLCJleHAiOjM3NjY1NTA5NjEwfQ.bMlKjRY-Ko2tIM4vdTVuhxYXkZGyuNqviodlfqe6AW580Zg4yh8g7Ihat-NHOUIkI4D_UbZ_6jcdO_j7F8XWXg";
+const numberRandom = Math.floor(Math.random() *9999);
 describe('TEST USERS ENDPOINTS STATUS OK', () => {
     describe('GET', () => {
         test('Route status OK /users', async () => {
@@ -204,7 +204,6 @@ describe('TEST USERS ENDPOINT DATA', () => {
                 role:"God"
             }).auth(token , { type: 'bearer' });
             const id = newUser._body.id;
-            console.log(id)
             const response = await request(app).delete(`/api/v2/users/${id}`).auth(token , { type: 'bearer' });
             expect(response.body).toEqual(expect.objectContaining({
                 first_name: expect.any(String),

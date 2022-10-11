@@ -7,9 +7,9 @@ afterEach(() => {
     server.close();
 });
 
-const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY1NTA5MzY2LCJleHAiOjM3NjY1NTA1NzY2fQ.d9BfFQ5jnBGJpNlQWWOHz_BRy3l1GXYyaEWr2yRPj7MTNcUk6TbyV23qX6DoHOSKszcd9cqfD3ebvZIdkRRd8g";
+const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY1NTEzMjEwLCJleHAiOjM3NjY1NTA5NjEwfQ.bMlKjRY-Ko2tIM4vdTVuhxYXkZGyuNqviodlfqe6AW580Zg4yh8g7Ihat-NHOUIkI4D_UbZ_6jcdO_j7F8XWXg";
 const tokenVencido = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY0Mzc1MDMyLCJleHAiOjE2NjQzNzg2MzJ9.ewdeBDT7nmLNgK0FDT_hn5YMm0ptgKcRbVRPff0NVSL20ekylx9_7IUgwHJhvqVWz7-K-Y8jGko89NPEirv7Nw";
-let randomNum = Math.floor(Math.random()*999);
+let randomNum = Math.floor(Math.random()*9999);
 
 describe('ENDPOINTS TEST', () => {
 
@@ -23,7 +23,7 @@ describe('ENDPOINTS TEST', () => {
                 expect(response.statusCode).toBe(200);
             });
             test('Devuelve las imágenes asociadas al producto con ID 1, RUTA /products/1/pictures', async () => {
-                const response = await request(app).get('/api/v2/products/3/pictures').auth(token, { type: 'bearer' });
+                const response = await request(app).get('/api/v2/products/1/pictures').auth(token, { type: 'bearer' });
                 expect(response.statusCode).toBe(200);
             });
             test('Devuelve las imágenes asociadas al producto con ID 1, QUERY /pictures/?product_id=1', async () => {
@@ -385,18 +385,21 @@ describe('DATA TYPES TEST', () => {
 
 
 describe('SERVER ERROR', () => {
-
+    var stub;
         /*----------------------------------------------------------------*/
         /*----------------------------------------------------------------*/
     describe('GET', () => {
         
-        
-        test.skip('Status 500, RUTA /pictures/1', async () => {
+        test('Status 500, RUTA /pictures/1', async () => {
+            stub = sinon.stub(db.pictures, 'findByPk').throws();
             const response = await request(app).get('/api/v2/pictures/1').auth(token, { type: 'bearer' });
+            stub.restore();
             expect(response.statusCode).toBe(500);
         });
         test.skip('Status 500, RUTA /products/1/pictures', async () => {
+            //stub = sinon.stub(db.pictures, 'findAll').throws();
             const response = await request(app).get('/api/v2/products/1/pictures').auth(token, { type: 'bearer' });
+            //stub.restore();
             expect(response.statusCode).toBe(500);
         });
         test.skip('Status 500, QUERY /pictures/?product_id=1', async () => {
