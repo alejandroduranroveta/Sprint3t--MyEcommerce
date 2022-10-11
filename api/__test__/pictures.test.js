@@ -1,5 +1,7 @@
 const { app, server } = require('../../server');
 const request = require('supertest');
+var sinon = require('sinon');
+const db = require('../../database/models');
 
 afterEach(() => {
     server.close();
@@ -387,7 +389,8 @@ describe('SERVER ERROR', () => {
         /*----------------------------------------------------------------*/
         /*----------------------------------------------------------------*/
     describe('GET', () => {
-
+        
+        
         test.skip('Status 500, RUTA /pictures/1', async () => {
             const response = await request(app).get('/api/v2/pictures/1').auth(token, { type: 'bearer' });
             expect(response.statusCode).toBe(500);
