@@ -35,7 +35,6 @@ const categoryController ={
         const id  = req.params.id;
         try {        
             let deletedCategory = await db.category.findByPk(id);
-            console.log(deletedCategory)
             if(deletedCategory) {
                 await db.category.destroy({
                     where:{id}

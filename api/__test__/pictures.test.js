@@ -7,7 +7,7 @@ afterEach(() => {
 
 const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY1NDMxMDU4LCJleHAiOjM3NjY1NDI3NDU4fQ.9n1hYoOu0RhP2vh_nthpB5Hs7fAnzlfvjfdiS_G7TY_iUdziNJFyaAYSWDtXGQA74-vTf-St4bSlDaEPifEnxA";
 const tokenVencido = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY0Mzc1MDMyLCJleHAiOjE2NjQzNzg2MzJ9.ewdeBDT7nmLNgK0FDT_hn5YMm0ptgKcRbVRPff0NVSL20ekylx9_7IUgwHJhvqVWz7-K-Y8jGko89NPEirv7Nw";
-let randomNum = Math.floor(Math.random(100));
+let randomNum = Math.floor(Math.random(1000));
 
 describe('ENDPOINTS TEST', () => {
 
@@ -98,7 +98,7 @@ describe('ENDPOINTS TEST', () => {
                 expect(response.statusCode).toBe(400);
             });
         });
-
+    });
         /*----------------------------------------------------------------*/
         /*----------------------------------------------------------------*/
         describe('PUT', () => {
@@ -180,7 +180,6 @@ describe('ENDPOINTS TEST', () => {
             });
         });
     });
-});
 
 
 
@@ -252,15 +251,15 @@ describe('TOKEN TEST', () => {
             product_id: 2
         };
         test('Token correcto', async () => {
-            const response = await request(app).put('/api/v2/pictures/4').send(pictureTest).auth(token, { type: 'bearer' });
+            const response = await request(app).put('/api/v2/pictures/3').send(pictureTest).auth(token, { type: 'bearer' });
             expect(response.statusCode).toBe(200);
         });
         test('Token vencido', async () => {
-            const response = await request(app).put('/api/v2/pictures/4').send(pictureTest).auth(tokenVencido, { type: 'bearer' });
+            const response = await request(app).put('/api/v2/pictures/3').send(pictureTest).auth(tokenVencido, { type: 'bearer' });
             expect(response.statusCode).toBe(401);
         });
         test('Token faltante', async () => {
-            const response = await request(app).put('/api/v2/pictures/4').send(pictureTest);
+            const response = await request(app).put('/api/v2/pictures/3').send(pictureTest);
             expect(response.statusCode).toBe(400);
         });
     });

@@ -4,8 +4,8 @@ const request = require('supertest');
 afterEach(() => {
     server.close();
 });
-const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY1NDMxMDU4LCJleHAiOjM3NjY1NDI3NDU4fQ.9n1hYoOu0RhP2vh_nthpB5Hs7fAnzlfvjfdiS_G7TY_iUdziNJFyaAYSWDtXGQA74-vTf-St4bSlDaEPifEnxA";
-
+const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY1NDk4NzExLCJleHAiOjM3NjY1NDk1MTExfQ.o6kZts3lbK_lgYk_csR1ob7Dy52QG5ughC0mOxLGS4wl0PUhZDM62afrHmeHYr1g5zp17L2WSvAGDKh0oY88Sg";
+const numberRandom = Math.floor(Math.random() *100);
 describe('TEST USERS ENDPOINTS STATUS OK', () => {
     describe('GET', () => {
         test('Route status OK /users', async () => {
@@ -13,14 +13,14 @@ describe('TEST USERS ENDPOINTS STATUS OK', () => {
             expect(response.statusCode).toBe(200);
         });
         test('Route status OK /users/id', async () => {
-            const response = await request(app).get('/api/v2/users/11').auth(token , { type: 'bearer' });
+            const response = await request(app).get('/api/v2/users/2').auth(token , { type: 'bearer' });
             expect(response.statusCode).toBe(200);
         });
     });
     describe('POST', () => {
         test('Route status OK /users/login', async () => {
             const response = await request(app).post('/api/v2/users/login').send({
-                username:"v",
+                username:"jeffg",
                 password:"123456"
             }).auth(token , { type: 'bearer' });
             expect(response.statusCode).toBe(200);
@@ -30,8 +30,8 @@ describe('TEST USERS ENDPOINTS STATUS OK', () => {
             const response = await request(app).post('/api/v2/users').send({
                 first_name:"q",
                 last_name:"q",
-                email:"q@outlook.com",
-                username:"q",
+                email:`kkk${numberRandom}@outlook.com`,
+                username:`q${numberRandom}`,
                 password:"123456",
                 profile_pic:"https://ibb.co/zF5mrtX",
                 role:"God"
@@ -40,10 +40,10 @@ describe('TEST USERS ENDPOINTS STATUS OK', () => {
         })});
     describe('PUT', () => {
         test('Route status OK /users/login/id', async () => {
-            const response = await request(app).put('/api/v2/users/4').send({
+            const response = await request(app).put('/api/v2/users/3').send({
                 first_name:"w",
                 last_name:"w",
-                email:"w@outlook.com",
+                email:`w${numberRandom}@outlook.com`,
                 username:"w",
                 password:"123456",
                 profile_pic:"https://ibb.co/zF5mrtX",
@@ -53,13 +53,23 @@ describe('TEST USERS ENDPOINTS STATUS OK', () => {
         });});  
     describe('DELETE', () => {
         test('Route status OK /users/id', async () => {
-            const response = await request(app).delete('/api/v2/users/11').auth(token , { type: 'bearer' });
+            const newUser = await request(app).post('/api/v2/users').send({
+                first_name:"mmmmmm",
+                last_name:"mmmmmm",
+                email:"xxxxxxxeex@outlook.com",
+                username:"mmmmmm",
+                password:"123456",
+                profile_pic:"https://ibb.co/zF5mrtX",
+                role:"God"
+            }).auth(token , { type: 'bearer' });
+            const id = newUser._body.id;
+            const response = await request(app).delete(`/api/v2/users/${id}`).auth(token , { type: 'bearer' });
             expect(response.statusCode).toBe(200);
         });
     });
 });
 
-describe.skip('TEST USERS ENDPOINTS STATUS ERROR', () => {
+describe('TEST USERS ENDPOINTS STATUS ERROR', () => {
     describe('GET', () => {
         test('Route status ERROR /users/id', async () => {
             const response = await request(app).get('/api/v2/users/99').auth(token , { type: 'bearer' });
@@ -89,14 +99,14 @@ describe.skip('TEST USERS ENDPOINTS STATUS ERROR', () => {
     });
 });
 
-describe.skip('TEST USERS ENDPOINT DATA', () => {
+describe('TEST USERS ENDPOINT DATA', () => {
     describe('GET', () => {
         test('Is array in /api/v2/users', async() => {
             const response = await request(app).get('/api/v2/users').auth(token , { type: 'bearer' });
             expect(response.body).toBeInstanceOf(Array);
         })
         test('Data type in /api/v2/users',async() => {
-            const response = await request(app).get('/api/v2/users').auth(token , { type: 'bearer' });
+            const response = await request(app).get('/api/v2/users/').auth(token , { type: 'bearer' });
                 response.body.forEach((user) => {
                     expect(user).toEqual(expect.objectContaining({
                     id: expect.any(Number),
@@ -111,8 +121,8 @@ describe.skip('TEST USERS ENDPOINT DATA', () => {
             });
         })
         test('Data type in /api/v2/users/id',async() => {
-            const response = await request(app).get('/api/v2/users/4').auth(token , { type: 'bearer' });
-                    expect(response).toEqual(expect.objectContaining({
+            const response = await request(app).get('/api/v2/users/1').auth(token , { type: 'bearer' });
+                    expect(response.body).toEqual(expect.objectContaining({
                     id: expect.any(Number),
                     first_name: expect.any(String),
                     last_name: expect.any(String),
@@ -127,10 +137,10 @@ describe.skip('TEST USERS ENDPOINT DATA', () => {
     describe('POST', () => {
         test('Data type /api/v2/users', async() => {
             const response = await request(app).post('/api/v2/users').send({
-                first_name:"e",
-                last_name:"e",
-                email:"e@outlook.com",
-                username:"e",
+                first_name:"re",
+                last_name:"r",
+                email:`kq${numberRandom}@outlook.com`,
+                username:"r",
                 password:"123456",
                 profile_pic:"https://ibb.co/zF5mrtX",
                 role:"God"
@@ -141,12 +151,12 @@ describe.skip('TEST USERS ENDPOINT DATA', () => {
                 email: expect.any(String),
                 username: expect.any(String),
                 profile_pic: expect.any(String),
-                password: expect.any(String),
+                id: expect.any(Number),
                 role: expect.any(String)}))          
             });
             test('Data type in /api/v2/users/login',async() => {
                 const response = await request(app).post('/api/v2/users/login').send({
-                    username:"yatusane",
+                    username:"jeffg",
                     password:"123456"
                 });
                 expect(response.body).toEqual(expect.objectContaining({
@@ -161,8 +171,8 @@ describe.skip('TEST USERS ENDPOINT DATA', () => {
             });
     });
     describe('PUT', () =>{
-        test('Data type in /api/v2/users/4',async() => {
-            const response = await request(app).put('/api/v2/users/2').send({
+        test('Data type in /api/v2/users/3',async() => {
+            const response = await request(app).put('/api/v2/users/3').send({
                 first_name:"f",
                 last_name:"f",
                 email:"f@outlook.com",
@@ -184,7 +194,18 @@ describe.skip('TEST USERS ENDPOINT DATA', () => {
     });
     describe('DELETE', () =>{
         test('Data type in /api/v2/users/',async() => {
-            const response = await request(app).delete('/api/v2/users/13').auth(token , { type: 'bearer' });
+            const newUser = await request(app).post('/api/v2/users').send({
+                first_name:"mmmmmm",
+                last_name:"mmmmmm",
+                email:"qqqqqqk@outlook.com",
+                username:"mmmmmm",
+                password:"123456",
+                profile_pic:"https://ibb.co/zF5mrtX",
+                role:"God"
+            }).auth(token , { type: 'bearer' });
+            const id = newUser._body.id;
+            console.log(id)
+            const response = await request(app).delete(`/api/v2/users/${id}`).auth(token , { type: 'bearer' });
             expect(response.body).toEqual(expect.objectContaining({
                 first_name: expect.any(String),
                 last_name: expect.any(String),
@@ -193,7 +214,7 @@ describe.skip('TEST USERS ENDPOINT DATA', () => {
                 profile_pic: expect.any(String),
                 password: expect.any(String),
                 role: expect.any(String)
-            })).auth(token , { type: 'bearer' }); 
+            }))
         })
     })
 });
@@ -206,5 +227,12 @@ describe('TEST TOKEN USERS',()=>{
     test('OK', async ()=>{
         const response = await request(app).get("/api/v2/users/").auth(token , { type: 'bearer' });
         expect(response.statusCode).toEqual(200);
+    });
+});
+
+describe('TEST SPECIAL SITUATION',()=>{
+    test('ID IS NOT INVALIDE', async ()=>{
+        const response = await request(app).put('/api/v2/users/ahdbabwwlaiwdbluawbd');
+        expect(response.statusCode).toEqual(400);
     });
 });
