@@ -10,7 +10,7 @@ const categoryController ={
             if (list.length > 0) {
                 res.status(200).json(list);
             }else{
-                res.status(200).json({msg: "Category list is empty"});
+                res.status(404).json({msg: "Category list is empty"});
             }
         } catch (errors) {
             res.status(500).json({msg: "Database error"});

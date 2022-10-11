@@ -1,12 +1,14 @@
 const { app, server } = require("../../server");
 const request = require("supertest");
+var sinon = require("sinon");
+const db = require('../../database/models');
 
 afterEach(() => {
   server.close();
 });
 
-const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY1NTA5MzY2LCJleHAiOjM3NjY1NTA1NzY2fQ.d9BfFQ5jnBGJpNlQWWOHz_BRy3l1GXYyaEWr2yRPj7MTNcUk6TbyV23qX6DoHOSKszcd9cqfD3ebvZIdkRRd8g";
-const tokenVencido = "123";
+const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY1NTEzMTY2LCJleHAiOjM3NjY1NTA5NTY2fQ.aixuL2zc5ft3oN1Ww6m3Rk1kapZcCRs2j90olu_Lm4uyrbnZn_7VwCvq3mBbGSMaw8CzU6NOx7HProrgw0peFw";
+const tokenVencido = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY0Mzc1MDMyLCJleHAiOjE2NjQzNzg2MzJ9.ewdeBDT7nmLNgK0FDT_hn5YMm0ptgKcRbVRPff0NVSL20ekylx9_7IUgwHJhvqVWz7-K-Y8jGko89NPEirv7Nw";
 
 describe("TEST EXITO 200 ", () => {
   describe("GET", () => {
@@ -272,50 +274,64 @@ describe("NEED CORRECT INFO TEST - ERROR 400", () => {
   });
 });
 
-describe("TEST FAIL 500 - Interrupcion ", () => {
+describe("TEST FAIL  - Interrupcion ", () => {
   describe("GET", () => {
-    test.skip("get /products", async () => {
+    test("get /products", async () => {
+      let stub = sinon.stub(db.products, 'findAll').throws();
       const response = await request(app)
         .get("/api/v2/products")
         .auth(token, { type: "bearer" });
+        stub.restore();
       expect(response.statusCode).toBe(500);
     });
 
-    test.skip("get /products/ID", async () => {
+    test("get /products/ID", async () => {
+      let stub = sinon.stub(db.products, 'findByPk').throws();
       const response = await request(app)
-        .get("/api/v2/products/1")
+        .get("/api/v2/products/3")
         .auth(token, { type: "bearer" });
-      expect(response.statusCode).toBe(500);
+        stub.restore();
+      expect(response.statusCode).toBe(404);
     });
 
-    test.skip("get /search", async () => {
+    test("get /search", async () => {
+      let stub = sinon.stub(db.products, 'findAll').throws();
       const response = await request(app)
         .get("/api/v2/products/search?q=alcon")
         .auth(token, { type: "bearer" });
+        stub.restore();
       expect(response.statusCode).toBe(500);
     });
-    test.skip("get /category", async () => {
+    test("get /category", async () => {
+      let stub = sinon.stub(db.products, 'findAll').throws();
       const response = await request(app)
         .get("/api/v2/products?category=1")
         .auth(token, { type: "bearer" });
+        stub.restore();
       expect(response.statusCode).toBe(500);
     });
 
-    test.skip("get /mostwanted", async () => {
+    test("get /mostwanted", async () => {
+      let stub = sinon.stub(db.products, 'findAll').throws();
       const response = await request(app)
         .get("/api/v2/products/mostwanted")
         .auth(token, { type: "bearer" });
+        stub.restore();
       expect(response.statusCode).toBe(500);
     });
-    test.skip("get /:id/pictures", async () => {
+    test("get /:id/pictures", async () => {
+      let stub = sinon.stub(db.pictures, 'findAll').throws();
       const response = await request(app)
-        .get("/api/v2/products/1/pictures")
+        .get("/api/v2/products/2/pictures")
         .auth(token, { type: "bearer" });
+        stub.restore();
       expect(response.statusCode).toBe(500);
     });
   });
+
   describe("POST", () => {
-    test.skip("/products", async () => {
+    test("/products", async () => {
+      let stub = sinon.stub(db.products, 'create').throws();
       const response = await request(app)
         .post("/api/v2/products")
         .send({
@@ -327,13 +343,15 @@ describe("TEST FAIL 500 - Interrupcion ", () => {
           most_wanted: 1,
         })
         .auth(token, { type: "bearer" });
+        stub.restore();
       expect(response.statusCode).toBe(500);
     });
   });
   describe("PUT", () => {
-    test.skip("/products", async () => {
+    test("/products", async () => {
+      let stub = sinon.stub(db.products, 'update').throws();
       const response = await request(app)
-        .put("/api/v2/products/50")
+        .put("/api/v2/products/1")
         .send({
           title: "unProductoModificado",
           description: "1",
@@ -343,14 +361,17 @@ describe("TEST FAIL 500 - Interrupcion ", () => {
           most_wanted: 1,
         })
         .auth(token, { type: "bearer" });
-      expect(re.statusCode).toBe(500);
+        stub.restore();
+        expect(response.statusCode).toBe(500);
     });
   });
   describe("DELETE", () => {
-    test.skip("Route status-ruta /products", async () => {
+    test("Route status-ruta /products", async () => {
+      let stub = sinon.stub(db.products, 'findByPk').throws();
       const response = await request(app)
         .delete("/api/v2/products/1")
         .auth(token, { type: "bearer" });
+        stub.restore();
       expect(response.statusCode).toBe(500);
     });
   });
