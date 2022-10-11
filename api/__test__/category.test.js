@@ -5,33 +5,57 @@ afterEach(() => {
     server.close();
 });
 
-// router.get('/',categoryController.list);
-// router.post('/',categoryController.create);
-// router.delete('/:id',categoryController.delete);
-
-const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY1NDMwNjM1LCJleHAiOjM3NjY1NDI3MDM1fQ.FC6M8KOAIAvzLxmRHeWElP6ZFU_UUBpKgFYLp1avZyZ7F5OoyNNj46R_ufugWz2msk_2YiDDdQiNCaiKjrRHYA";
-const tokenVencido = "123";
-
 describe('TEST EXITO 200 ', () => {
     describe('GET', () => {
         test('get /category', async () => {
-            const response = await request(app).get('/api/v2/category').auth(token,{ type: 'bearer' });
+            const response = await request(app).get('/api/v2/category');
             expect(response.statusCode).toBe(200);
             });
-    var Idproducts
+
     describe('POST', () => {
         test('/category', async () => {
             const response = await request(app).post('/api/v2/category').send({
-                "name": "Fruta",
-            }).auth(token, { type: 'bearer' });
-            Idcategory = response._body.id
-            
+                "name": 'prueba  1',
+            });
             expect(response.statusCode).toBe(200);
         });
+
+    // describe('DELETE', () => {
+    //     test('delete category  ', async () => {
+    //             const response = await request(app).delete(`/api/v2/category/${Idcategory}`);
+    //             expect(response.statusCode).toBe(200);
+    //         });
+    //     });
+    // });
+});
+});
+describe('TEST VALORES INVALIDOS',() => {
     describe('DELETE', () => {
-        test('delete category   ', async () => {
-                const response = await request(app).delete(`/api/v2/category/${Idcategory}`).auth(token, { type: 'bearer' });
-                expect(response.statusCode).toBe(200);
-            });
+        test('delete category id invalida  ', async () => {
+            const response = await request(app).delete(`/api/v2/category/696969`);
+            expect(response.statusCode).toBe(404);
         });
     });
+});
+
+describe('TEST 500 ', () => {
+    describe('GET', () => {
+        test.skip('get /category', async () => {
+            const response = await request(app).get('/api/v2/category');
+            expect(response.statusCode).toBe(500);
+            });
+    describe('POST', () => {
+        test.skip('Crear con nombre existente', async () => {
+            const response = await request(app).post('/api/v2/category/').send({
+            });
+            expect(response.statusCode).toBe(500);
+        });
+    // describe('DELETE', () => {
+    //     test.skip('delete category   ', async () => {
+    //             const response = await request(app).delete(`/api/v2/category/${Idcategory}`);
+    //             expect(response.statusCode).toBe(500);
+    //         });
+       });
+    });
+    })
+})

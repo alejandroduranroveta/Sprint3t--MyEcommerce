@@ -167,7 +167,7 @@ const productsController = {
           msg: "Product deleted successfully",
         });
       } else {
-        res.status(401).json({
+        return res.status(401).json({
           msg: "Not found products",
         });
       }
