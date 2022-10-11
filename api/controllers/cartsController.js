@@ -29,8 +29,6 @@ const getCartIdFromUsername = async username => {
         })
         return user.id;
     } catch (err) {
-        //console.log(err);
-        return null;
     }
 
 }

@@ -7,10 +7,9 @@ afterEach(() => {
     server.close();
 });
 
-const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY1NTEzMjEwLCJleHAiOjM3NjY1NTA5NjEwfQ.bMlKjRY-Ko2tIM4vdTVuhxYXkZGyuNqviodlfqe6AW580Zg4yh8g7Ihat-NHOUIkI4D_UbZ_6jcdO_j7F8XWXg";
-const tokenVencido = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY0Mzc1MDMyLCJleHAiOjE2NjQzNzg2MzJ9.ewdeBDT7nmLNgK0FDT_hn5YMm0ptgKcRbVRPff0NVSL20ekylx9_7IUgwHJhvqVWz7-K-Y8jGko89NPEirv7Nw";
+const token = process.env.TOKEN;
+const tokenVencido = process.env.TOKEN_VENCIDO;
 const rutaGet = '/api/v2/carts/1';
-const rutaPut = 'api/v2/carts/1';
 
 describe('Carts /api/v2/carts', () => {
     describe('GET /carts Autenticacion', () => {
@@ -101,6 +100,20 @@ describe('Carts /api/v2/carts', () => {
             });
             expect(response.statusCode).toBe(400)
         });
+        test('Error de servidor', async () => {
+            var stub = sinon.stub(db.carts_has_products, 'create').throws();
+            const response = await request(app).put(rutaGet).auth(token, {type: 'bearer'}).send({
+                cart : [{
+                    product: 1,
+                    quantity: 2
+                },{
+                    product: 2,
+                    quantity: 3
+                }]
+            });
+            stub.restore();
+            expect(response.statusCode).toEqual(500);
+        })
         test('Actualiza a un cart con muchos productos y cantidades', async () => {
             const response = await request(app).put(rutaGet).auth(token, {type: 'bearer'}).send({
                 cart : [{
@@ -117,20 +130,6 @@ describe('Carts /api/v2/carts', () => {
             });
             expect(response.statusCode).toBe(200)
         });
-        test('Error de servidor', async () => {
-            var stub = sinon.stub(db.carts_has_products, 'create').throws();
-            const response = await request(app).put(rutaGet).auth(token, {type: 'bearer'}).send({
-                cart : [{
-                    product: 1,
-                    quantity: 2
-                },{
-                    product: 2,
-                    quantity: 3
-                }]
-            });
-            stub.restore();
-            expect(response.statusCode).toEqual(500);
-        })
     })
 
 });

@@ -181,7 +181,7 @@ const picturesController = {
       }
 
       try {
-        const pics = await db.pictures.findAll({
+        const pics = await db.pictures.findOne({
           attributes: ["img", "description", "product_id"],
           where: {
             product_id: id,
