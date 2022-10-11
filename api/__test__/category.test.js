@@ -26,7 +26,6 @@ describe('TEST EXITO 200 ', () => {
             const newCategory = await request(app).post('/api/v2/category').send({
                 "name": 'prueba  15',
             });
-            console.log(newCategory._body.id);
             const id =newCategory._body.id;
                 const response = await request(app).delete(`/api/v2/category/${id}`);
                 expect(response.statusCode).toBe(200);
