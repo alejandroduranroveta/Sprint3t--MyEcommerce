@@ -97,7 +97,7 @@ const userController = {
 				username
 			};
 			const userCreated = await db.users.create(newUser);
-			//await createCart(username);
+			await createCart(username);
 			const {dataValues} = userCreated
 			let userNotPassword = {
 				id:dataValues.id,
@@ -142,7 +142,7 @@ const userController = {
 			console.log(idUser);
 			if (idUser !== null && !isNaN(idUser)) {
 				const userDeleted = await db.users.findByPk(idUser);
-				//await removeCart(idUser);
+				await removeCart(idUser);
 				
 				if (userDeleted!==null) {
 					await db.users.destroy({
