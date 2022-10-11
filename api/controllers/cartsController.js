@@ -84,11 +84,12 @@ const cartById = async (req, res) => {
 
 const editCart = async (req, res) => {
     const { id } = req.dataToken;
+    const carts_id = await getCartIdByUserId(id);
     const cart = req.body.cart;
     let error = false;
     await db.carts_has_products.destroy({
         where: {
-            carts_id: id
+            carts_id
         }
     });
     try {
