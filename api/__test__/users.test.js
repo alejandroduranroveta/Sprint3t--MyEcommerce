@@ -72,7 +72,7 @@ describe('TEST USERS ENDPOINTS STATUS OK', () => {
 describe('TEST USERS ENDPOINTS STATUS ERROR', () => {
     describe('GET', () => {
         test('Route status ERROR /users/id', async () => {
-            const response = await request(app).get('/api/v2/users/99').auth(token , { type: 'bearer' });
+            const response = await request(app).get('/api/v2/users/9999').auth(token , { type: 'bearer' });
             expect(response.statusCode).toBe(404);
         });
     });
@@ -230,7 +230,7 @@ describe('TEST TOKEN USERS',()=>{
 });
 
 describe('TEST SPECIAL SITUATION',()=>{
-    test('ID IS NOT INVALIDE', async ()=>{
+    test('ID IS INVALID', async ()=>{
         const response = await request(app).put('/api/v2/users/ahdbabwwlaiwdbluawbd');
         expect(response.statusCode).toEqual(400);
     });
