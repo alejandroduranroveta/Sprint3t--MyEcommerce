@@ -5,8 +5,8 @@ afterEach(() => {
   server.close();
 });
 
-const token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZmlyc3RfbmFtZSI6IkJydW5vIiwibGFzdF9uYW1lIjoiRnVsY28iLCJlbWFpbCI6ImJydW5vLmZ1bGNvQG91dGxvb2suY29tIiwidXNlcm5hbWUiOiJicnVub2YiLCJwcm9maWxlX3BpYyI6Imh0dHBzOi8vaWJiLmNvL3pGNW1ydFgiLCJyb2xlIjoiR29kIiwiaWF0IjoxNjY1NTEzMjEwLCJleHAiOjM3NjY1NTA5NjEwfQ.bMlKjRY-Ko2tIM4vdTVuhxYXkZGyuNqviodlfqe6AW580Zg4yh8g7Ihat-NHOUIkI4D_UbZ_6jcdO_j7F8XWXg";
-const tokenVencido = "123";
+const token = process.env.TOKEN;
+const tokenVencido = process.env.TOKEN_VENCIDO;
 
 describe("TEST EXITO 200 ", () => {
   describe("GET", () => {
