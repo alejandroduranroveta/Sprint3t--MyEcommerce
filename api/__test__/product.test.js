@@ -135,7 +135,7 @@ describe("TOKEN VENCIDO ", () => {
   describe("PUT", () => {
     test("PUT/products espera 401", async () => {
       const response = await request(app)
-        .put("/api/v2/products/1000004")
+        .put("/api/v2/products/10")
         .auth(tokenVencido, { type: "bearer" });
       expect(response.statusCode).toBe(401);
     });
@@ -259,15 +259,15 @@ describe("NEED CORRECT INFO TEST - ERROR 400", () => {
   });
 
   describe("PUT", () => {
-    test.skip("Route status-ruta /products", async () => {
-      const response = await request(app).put("/api/v2/products/1");
-      expect(response.statusCode).toBe(404);
+    test("Route status-ruta /products", async () => {
+      const response = await request(app).put("/api/v2/products/696969");
+      expect(response.statusCode).toBe(400);
     });
   });
   describe("DELETE", () => {
-    test.skip("Route status-ruta /products", async () => {
-      const response = await request(app).delete("/api/v2/products/114");
-      expect(response.statusCode).toBe(404);
+    test("Route status-ruta /products", async () => {
+      const response = await request(app).delete("/api/v2/products/696969");
+      expect(response.statusCode).toBe(400);
     });
   });
 });
@@ -355,3 +355,4 @@ describe("TEST FAIL 500 - Interrupcion ", () => {
     });
   });
 });
+
