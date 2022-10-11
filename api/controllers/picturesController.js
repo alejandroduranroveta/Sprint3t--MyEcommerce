@@ -54,11 +54,13 @@ const picturesController = {
               msg: "Product not found"
             });
       });
+
       if(!error) {
-      return res.status(201).json({
-        msg: "Image has been created",
-        pic,
-      });}
+        return res.status(201).json({
+          msg: "Image has been created",
+          pic,
+        });}
+      
     } catch (error) {
       return res
         .status(500)
@@ -122,8 +124,6 @@ const picturesController = {
           product_id,
         });
       }
-
-
     } catch (error) {
       return res
         .status(500)
