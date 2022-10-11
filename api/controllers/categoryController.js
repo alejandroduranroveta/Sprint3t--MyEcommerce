@@ -1,4 +1,8 @@
 const db = require("../../database/models");
+
+
+
+
 const categoryController ={
     list: async (req, res) => {
         try {
@@ -15,11 +19,12 @@ const categoryController ={
     },
     create: async (req, res) => {
         try {
-            const {name="Comida"} = req.body;
+            const {name = "Comida"} = req.body;
             const category ={
                 name
             }
-            const newCategory = await db.category.create(category);
+            let newCategory = await db.category.create(category);
+            //console.log(Number(newCategory.dataValues.id));
             res.status(200).json(newCategory);
         } catch (errors) {
             console.log(errors);
@@ -27,21 +32,18 @@ const categoryController ={
         }
     },
     delete: async (req, res) => {
-        try {
-            const {id} = req.params;
-            const deletedCategory = db.category.findByPk(id);
-            await db.category.destroy({where:{id}});
-            if (id != null) {
-				res.status(200).json(deletedCategory);
-			} else if (!isNaN(id)) {
-				res.status(404).json({ msg: "Not fund category" });
-			} else {
-				res
-					.status(400)
-					.json({
-						msg: `'${id}' that is not a valid id, try with something else numerical`,
-					});
-			}
+        const id  = req.params.id;
+        try {        
+            let deletedCategory = await db.category.findByPk(id);
+            console.log(deletedCategory)
+            if(deletedCategory) {
+                await db.category.destroy({
+                    where:{id}
+                })
+                return res.status(200).json({ msg: "Deleted" });
+            }else{
+                return res.status(404).json({ msg: "Not found category" });
+            }
         }catch (err) {
             console.log(err);
             res.status(500).json({msg: "Error database"});
