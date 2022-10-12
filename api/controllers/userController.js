@@ -97,7 +97,7 @@ const userController = {
 				username
 			};
 			const userCreated = await db.users.create(newUser);
-			//await createCart(username);
+			await createCart(username);
 			const {dataValues} = userCreated
 			let userNotPassword = {
 				id:dataValues.id,
@@ -118,7 +118,7 @@ const userController = {
 	modifyUser: async (req, res) => {
 		try {
 			let idUser = req.params.id;
-			if (idUser !== null && !isNaN(idUser)) {
+			if (idUser && !isNaN(idUser)) {
 				let newUser = {...req.body};
 				await db.users.update(newUser, { where: { id: idUser } });
 				res.json(newUser);
@@ -133,13 +133,13 @@ const userController = {
 			}
 		} catch (error) {
 			console.log(error);
-			res.status(500);
+			res.status(500).json({ msg: "Error database" });
 		}
 	},
 	delete: async (req, res) => {
 		try {
 			let idUser = req.params.id;
-			if (idUser !== null && !isNaN(idUser)) {
+			if (idUser && !isNaN(idUser)) {
 				const userDeleted = await db.users.findByPk(idUser);
 				//await removeCart(idUser);
 				if (userDeleted) {
@@ -160,7 +160,7 @@ const userController = {
 					});
 			}
 		} catch (error) {
-			res.status(500);
+			res.status(500).json({ msg: "Error database" });
 			console.log(error);
 		}
 	}
