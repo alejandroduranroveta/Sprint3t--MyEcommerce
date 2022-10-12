@@ -87,7 +87,7 @@ describe("TEST USERS ENDPOINTS STATUS OK", () => {
 			const response = await request(app)
 				.delete(`/api/v2/users/${id}`)
 				.auth(token, { type: "bearer" });
-			expect(response.statusCode).toBe(200);
+				expect(response.statusCode).toBe(200);
 		});
 	});
 });

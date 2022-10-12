@@ -1,8 +1,7 @@
 const { sequelize } = require('../../database/models');
 const db = require('../../database/models');
 
-const createCart = async username => {
-    let user_id = await getCartIdFromUsername(username);
+const createCart = async user_id => {
     await db.carts.create({
         user_id
     }).then(r => {
@@ -19,27 +18,17 @@ const removeCart = async userId => {
     })
 }
 
-const getCartIdFromUsername = async username => {
+const emptyCart = async userId => {
     try {
-        let user = await db.users.findOne({
-            attributes: ["id"],
+        const carts_id = await getCartIdByUserId(userId);
+        await db.carts_has_products.destroy({
             where: {
-                username
+                carts_id
             }
         })
-        return user.id;
-    } catch (err) {
+    } catch (error) {
+        console.log(error);
     }
-
-}
-
-const emptyCart = async userId => {
-    const carts_id = await getCartIdByUserId(userId);
-    await db.carts_has_products.destroy({
-        where: {
-            carts_id
-        }
-    })
 }
 
 const getCartIdByUserId = async userId => {
