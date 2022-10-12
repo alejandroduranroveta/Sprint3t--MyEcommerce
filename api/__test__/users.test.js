@@ -233,6 +233,18 @@ describe('TEST USERS ENDPOINT ERROR SERVER',() => {
         stub.restore();
         expect(response.statusCode).toBe(500);
     });
+    test.skip('Delete status ERROR SERVER /users/id', async () => {
+        // let stub = sinon.stub(db.users,'destroy').throws();
+        // const response = await request(app).delete('/api/v2/users/1').auth(token , { type: 'bearer' });
+        // stub.restore();
+        // expect(response.statusCode).toBe(500);
+            let stub = sinon.stub(db.users, 'findByPk').throws();
+            const response = await request(app)
+                .delete("/api/v2/users/1")
+                .auth(token, { type: "bearer" });
+                stub.restore();
+            expect(response.statusCode).toBe(500);
+    });
     test('Login status ERROR SERVER /users/login', async () => {
         stub = sinon.stub(db.users,'findOne').throws();
         const response = await request(app).post('/api/v2/users/login').send({
@@ -255,7 +267,24 @@ describe('TEST USERS ENDPOINT ERROR SERVER',() => {
         stub.restore();
         expect(response.statusCode).toBe(500);
     });
+    testskip('Modify status ERROR SERVER /users/id', async () => {
+        let stub = sinon.stub(db.users,'update').throws();
+        const response = await request(app).put('/api/v2/users/3').send({
+            first_name:"w",
+            last_name:"w",
+            email:`wxxxxx${numberRandom}@outlook.com`,
+            username:"w",
+            password:"123456",
+            profile_pic:"https://ibb.co/zF5mrtX",
+            role:"God"
+        }).auth(token , { type: 'bearer' });
+        stub.restore();
+        expect(response.statusCode).toBe(500);
+    });
 });
+
+
+
 
 describe.skip('TEST TOKEN USERS',()=>{
     test('ERROR', async ()=>{
