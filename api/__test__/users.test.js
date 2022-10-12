@@ -267,7 +267,7 @@ describe('TEST USERS ENDPOINT ERROR SERVER',() => {
         stub.restore();
         expect(response.statusCode).toBe(500);
     });
-    testskip('Modify status ERROR SERVER /users/id', async () => {
+    test.skip('Modify status ERROR SERVER /users/id', async () => {
         let stub = sinon.stub(db.users,'update').throws();
         const response = await request(app).put('/api/v2/users/3').send({
             first_name:"w",
