@@ -228,6 +228,12 @@ describe('TEST USERS ENDPOINT ERROR SERVER',() => {
         stub.restore();
         expect(response.statusCode).toBe(500);
     });
+    test('ByID status ERROR SERVER /users/id', async () => {
+        stub = sinon.stub(db.users,'findByPk').throws();
+        const response = await request(app).get('/api/v2/users/1').auth(token, { type: 'bearer' });
+        stub.restore();
+        expect(response.statusCode).toBe(500);
+    });
     
 });
 
