@@ -111,7 +111,7 @@ const userController = {
 			};
 			res.status(201).json(userNotPassword)
 		} catch (error) {
-			//console.log(error);
+			console.log(error);
 			res.status(500).json({ msg: "Error database" });
 		}
 	},
@@ -132,18 +132,20 @@ const userController = {
 					});
 			}
 		} catch (error) {
-			//console.log(error);
+			console.log(error);
 			res.status(500);
 		}
 	},
 	delete: async (req, res) => {
 		try {
 			let idUser = req.params.id;
-			console.log(idUser);
 			if (idUser !== null && !isNaN(idUser)) {
 				const userDeleted = await db.users.findByPk(idUser);
 				//await removeCart(idUser);
-				if (!userDeleted) {
+				console.log(idUser);
+
+				if (userDeleted) {
+					console.log("ENTROOOOO");
 					await db.users.destroy({
 						where: {
 							id: idUser
@@ -153,16 +155,10 @@ const userController = {
 				} else if(!isNaN(idUser) && userDeleted===0){
 					res.status(400).json({ msg: "Not fund user" });
 				}
-			}else if(isNaN(idUser)) {
-				res
-					.status(400)
-					.json({
-						msg: `'${req.params.id}' that is not a valid id, try with something else numerical`,
-					});
 			}
 		} catch (error) {
 			res.status(500);
-			//console.log(error);
+			console.log(error);
 		}
 	}
 };
