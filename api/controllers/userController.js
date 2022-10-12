@@ -143,19 +143,17 @@ const userController = {
 			if (idUser !== null && !isNaN(idUser)) {
 				const userDeleted = await db.users.findByPk(idUser);
 				//await removeCart(idUser);
-				if (userDeleted!==null) {
+				if (!userDeleted) {
 					await db.users.destroy({
 						where: {
 							id: idUser
 						}
 					});
-					return res.status(200).json(userDeleted);
-				} else {
-					return res.status(404).json({ msg: "Not fund user" });
+					res.status(200).json(userDeleted);
+				} else if(!isNaN(idUser) && userDeleted===0){
+					res.status(400).json({ msg: "Not fund user" });
 				}
-			} else if (!isNaN(idUser)) {
-				return res.status(404).json({ msg: "Not fund user" });
-			} else {
+			}else if(isNaN(idUser)) {
 				res
 					.status(400)
 					.json({

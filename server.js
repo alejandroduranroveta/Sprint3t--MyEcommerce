@@ -33,7 +33,7 @@ const PORT = process.env.PORT;
 // 		console.log("error: " + err);
 // 	});
 
-const server = app.listen(PORT, () => {
+const server = app.listen(0, () => {
 	console.log("Se levanto el server en el puerto " + PORT);
 });
 module.exports = {app,server}
