@@ -366,7 +366,7 @@ describe("TEST FAIL  - Interrupcion ", () => {
     });
   });
   describe("DELETE", () => {
-    test("Route status-ruta /products", async () => {
+    test("error 500 delete products", async () => {
       let stub = sinon.stub(db.products, 'findByPk').throws();
       const response = await request(app)
         .delete("/api/v2/products/1")
