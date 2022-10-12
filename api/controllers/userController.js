@@ -111,7 +111,7 @@ const userController = {
 			};
 			res.status(201).json(userNotPassword)
 		} catch (error) {
-			console.log(error);
+			//console.log(error);
 			res.status(500).json({ msg: "Error database" });
 		}
 	},
@@ -132,7 +132,7 @@ const userController = {
 					});
 			}
 		} catch (error) {
-			console.log(error);
+			//console.log(error);
 			res.status(500).json({ msg: "Error database" });
 		}
 	},
@@ -161,7 +161,7 @@ const userController = {
 			}
 		} catch (error) {
 			res.status(500).json({ msg: "Error database" });
-			console.log(error);
+			//console.log(error);
 		}
 	}
 };
