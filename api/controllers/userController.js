@@ -142,19 +142,22 @@ const userController = {
 			if (idUser !== null && !isNaN(idUser)) {
 				const userDeleted = await db.users.findByPk(idUser);
 				//await removeCart(idUser);
-				console.log(idUser);
-
 				if (userDeleted) {
-					console.log("ENTROOOOO");
 					await db.users.destroy({
 						where: {
 							id: idUser
 						}
 					});
-					res.status(200).json(userDeleted);
-				} else if(!isNaN(idUser) && userDeleted===0){
+					return res.status(200).json(userDeleted);
+				} else if(!isNaN(idUser) && userDeleted === 0){
 					res.status(400).json({ msg: "Not fund user" });
 				}
+			}else if(isNaN(idUser)) {
+				res
+					.status(400)
+					.json({
+						msg: `'${req.params.id}' that is not a valid id, try with something else numerical`,
+					});
 			}
 		} catch (error) {
 			res.status(500);
