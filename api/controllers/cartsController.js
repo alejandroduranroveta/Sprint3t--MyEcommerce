@@ -19,16 +19,12 @@ const removeCart = async userId => {
 }
 
 const emptyCart = async userId => {
-    try {
         const carts_id = await getCartIdByUserId(userId);
         await db.carts_has_products.destroy({
             where: {
                 carts_id
             }
         })
-    } catch (error) {
-        console.log(error);
-    }
 }
 
 const getCartIdByUserId = async userId => {
