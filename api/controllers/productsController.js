@@ -161,7 +161,6 @@ const productsController = {
       const element = await db.products.findByPk(id);
       if (element) {
         const picDB = await pictures.deletedByProduct(req, res, id);
-        console.log(picDB)
         await element.destroy();
         return res.status(200).json({
           element,
