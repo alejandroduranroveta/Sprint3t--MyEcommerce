@@ -1,5 +1,7 @@
 const { app, server } = require('../../server');
 const request = require('supertest');
+var sinon = require("sinon");
+const db = require('../../database/models');
 
 afterEach(() => {
     server.close();
@@ -44,19 +46,25 @@ describe('TEST VALORES INVALIDOS',() => {
     
     describe('TEST 500 ', () => {
         describe('GET', () => {
-            test.skip('get /category', async () => {
+            test('get /category', async () => {
+                let stub = sinon.stub(db.category,'findAll').throws();
                 const response = await request(app).get('/api/v2/category');
+                stub.restore();
                 expect(response.statusCode).toBe(500);
             });
             describe('POST', () => {
-                test.skip('Crear con nombre existente', async () => {
+                test('Crear con nombre existente', async () => {
+                    let stub = sinon.stub(db.category,'create').throws();
                     const response = await request(app).post('/api/v2/category/').send({
                     });
+                    stub.restore();
                     expect(response.statusCode).toBe(500);
                 });
                 describe('DELETE', () => {
-                    test.skip('delete category   ', async () => {
-                        const response = await request(app).delete(`/api/v2/category/${Idcategory}`);
+                    test('delete category   ', async () => {
+                        let stub = sinon.stub(db.category,'destroy').throws();
+                        const response = await request(app).delete(`/api/v2/category/2`);
+                        stub.restore();
                         expect(response.statusCode).toBe(500);
                     });
                 });

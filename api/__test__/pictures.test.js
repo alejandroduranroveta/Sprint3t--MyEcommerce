@@ -397,12 +397,12 @@ describe('SERVER ERROR', () => {
             expect(response.statusCode).toBe(500);
         });
         test('Status 500, RUTA /products/1/pictures', async () => {
-            stub = sinon.stub(db.pictures, 'findOne').throws();
+            stub = sinon.stub(db.pictures, 'findAll').throws();
             const response = await request(app).get('/api/v2/products/1/pictures').auth(token, { type: 'bearer' });
             stub.restore();
             expect(response.statusCode).toBe(500);
         });
-        test.skip('Status 500, QUERY /pictures/?product_id=1', async () => {
+        test('Status 500, QUERY /pictures/?product_id=1', async () => {
             stub = sinon.stub(db.pictures, 'findOne').throws();
             const response = await request(app).get('/api/v2/pictures/?product_id=1').auth(token, { type: 'bearer' });
             stub.restore();
@@ -414,14 +414,16 @@ describe('SERVER ERROR', () => {
 
         /*----------------------------------------------------------------*/
         /*----------------------------------------------------------------*/
-        test.skip('Status 500, RUTA /pictures', async () => {
+        test('Status 500, RUTA /pictures', async () => {
             const pictureTest = {
                 img: "www.imagen.com/" + randomNum,
                 description: "Ejemplo de una descriptción",
                 product_id: 1
             };
+            stub = sinon.stub(db.pictures, 'create').throws();
             const response = await request(app).post('/api/v2/pictures').send(pictureTest).auth(token, { type: 'bearer' });
-            expect(response.statusCode).toBe(201);
+            stub.restore();
+            expect(response.statusCode).toBe(500);
         });
     });
 
@@ -434,8 +436,10 @@ describe('SERVER ERROR', () => {
             description: "imagen de prueba",
             product_id: 2
         };
-        test.skip('Status 500', async () => {
+        test('Status 500', async () => {
+            stub = sinon.stub(db.pictures, 'findByPk').throws();
             const response = await request(app).put('/api/v2/pictures/4').send(pictureTest).auth(token, { type: 'bearer' });
+            stub.restore();
             expect(response.statusCode).toBe(500);
         });
 
@@ -450,11 +454,12 @@ describe('SERVER ERROR', () => {
             description: "Ejemplo de una descriptción",
             product_id: 1
         }
-        test.skip('Status 500, Ruta /:id', async () => {
-
+        test('Status 500, Ruta /:id', async () => {
+            stub = sinon.stub(db.pictures, 'destroy').throws();
             newPicture = await request(app).post('/api/v2/pictures').send(pictureTest).auth(token, { type: 'bearer' });
                 const id = newPicture._body.pic.id;
                 const response = await request(app).delete(`/api/v2/pictures/${id}`).auth(token, { type: 'bearer' });
+                stub.restore();
                 expect(response.statusCode).toBe(500);
         });
 
