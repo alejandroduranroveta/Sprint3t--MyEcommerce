@@ -40,10 +40,10 @@ describe("TEST USERS ENDPOINTS STATUS OK", () => {
 			const response = await request(app)
 				.post("/api/v2/users")
 				.send({
-					first_name: "q",
-					last_name: "q",
-					email: `kkk${numberRandom}@outlook.com`,
-					username: `q${numberRandom}`,
+					first_name: "Juan",
+					last_name: "Ferreira",
+					email: `JuanFerreira${numberRandom}@outlook.com`,
+					username: `JuanFerreira${numberRandom}`,
 					password: "123456",
 					profile_pic: "https://ibb.co/zF5mrtX",
 					role: "God",
@@ -57,10 +57,10 @@ describe("TEST USERS ENDPOINTS STATUS OK", () => {
 			const response = await request(app)
 				.put("/api/v2/users/3")
 				.send({
-					first_name: "w",
-					last_name: "w",
-					email: `wq${numberRandom}@outlook.com`,
-					username: "w",
+					first_name: "Lucas",
+					last_name: "Rodrigo",
+					email: `lucasRodrigo${numberRandom}@outlook.com`,
+					username: "lucasRo",
 					password: "123456",
 					profile_pic: "https://ibb.co/zF5mrtX",
 					role: "God",
@@ -74,10 +74,10 @@ describe("TEST USERS ENDPOINTS STATUS OK", () => {
 			const newUser = await request(app)
 				.post("/api/v2/users")
 				.send({
-					first_name: "mmmmmm",
-					last_name: "mmmmmm",
-					email: `jhjhqp${numberRandom}@outlook.com`,
-					username: "mmmmmm",
+					first_name: "Martin",
+					last_name: "Hernández",
+					email: `MartinHer${numberRandom}@outlook.com`,
+					username: "MartinHer",
 					password: "123456",
 					profile_pic: "https://ibb.co/zF5mrtX",
 					role: "God",
@@ -183,10 +183,10 @@ describe("TEST USERS ENDPOINT DATA", () => {
 			const response = await request(app)
 				.post("/api/v2/users")
 				.send({
-					first_name: "re",
-					last_name: "r",
-					email: `kq${numberRandom}@outlook.com`,
-					username: "r",
+					first_name: "Francisco",
+					last_name: "Hernández",
+					email: `franHer${numberRandom}@outlook.com`,
+					username: "fran",
 					password: "123456",
 					profile_pic: "https://ibb.co/zF5mrtX",
 					role: "God",
@@ -227,10 +227,10 @@ describe("TEST USERS ENDPOINT DATA", () => {
 			const response = await request(app)
 				.put("/api/v2/users/3")
 				.send({
-					first_name: "f",
-					last_name: "f",
-					email: `fasd${numberRandom}@outlook.com`,
-					username: "f",
+					first_name: "Fede",
+					last_name: "García",
+					email: `Fede12${numberRandom}@outlook.com`,
+					username: "FedeGar",
 					password: "123456",
 					profile_pic: "https://ibb.co/zF5mrtX",
 					role: "God",
@@ -254,10 +254,10 @@ describe("TEST USERS ENDPOINT DATA", () => {
 			const newUser = await request(app)
 				.post("/api/v2/users")
 				.send({
-					first_name: "mmmmmm",
-					last_name: "mmmmmm",
-					email: `qqqqqklkq${numberRandom}llkk@outlook.com`,
-					username: "mmmmmm",
+					first_name: "Lucas",
+					last_name: "Pérez",
+					email: `lucasPerez${numberRandom}llkk@outlook.com`,
+					username: "Lucas",
 					password: "123456",
 					profile_pic: "https://ibb.co/zF5mrtX",
 					role: "God",
@@ -323,10 +323,10 @@ describe("TEST USERS ENDPOINT ERROR SERVER", () => {
 		const response = await request(app)
 			.post("/api/v2/users")
 			.send({
-				first_name: "q",
-				last_name: "q",
-				email: `kkk${numberRandom}@outlook.com`,
-				username: `q${numberRandom}`,
+				first_name: "Juan",
+				last_name: "Sánchez",
+				email: `juanSánchez${numberRandom}@outlook.com`,
+				username: `Juan${numberRandom}`,
 				password: "123456",
 				profile_pic: "https://ibb.co/zF5mrtX",
 				role: "God",
@@ -340,10 +340,10 @@ describe("TEST USERS ENDPOINT ERROR SERVER", () => {
 		const response = await request(app)
 			.put("/api/v2/users/3")
 			.send({
-				first_name: "w",
-				last_name: "w",
-				email: `wxxxxx${numberRandom}@outlook.com`,
-				username: "w",
+				first_name: "Andrés",
+				last_name: "González",
+				email: `AndrésGo${numberRandom}@outlook.com`,
+				username: "Gonza",
 				password: "123456",
 				profile_pic: "https://ibb.co/zF5mrtX",
 				role: "God",
